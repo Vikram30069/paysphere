@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PayFlow — Simple payments. Smarter transactions. Send money, track your history, and manage digital payments instantly.">
+    <title>PayFlow — Simple Payments. Smarter Transactions.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ============================================================
+         NAVBAR
+    ============================================================ -->
+    <nav class="navbar" id="main-navbar">
+        <div class="nav-container">
+
+            <div class="nav-brand" onclick="showSection('dashboard')">
+                <div class="nav-brand-icon">₹</div>
+                <span class="nav-brand-name">PayFlow</span>
+            </div>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a class="nav-link active" id="nav-home"         onclick="showSection('dashboard')">Home</a></li>
+                <li><a class="nav-link"         id="nav-send"         onclick="showSection('send')">Send Money</a></li>
+                <li><a class="nav-link"         id="nav-transactions" onclick="showSection('transactions')">Transactions</a></li>
+                <li><a class="nav-link"         id="nav-about"        onclick="scrollToFooter()">About</a></li>
+            </ul>
+
+            <div class="nav-end">
+                <div class="nav-avatar" id="nav-avatar" title="Arjun Kumar">AK</div>
+                <button class="nav-menu-btn" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- ============================================================
+         MAIN CONTENT
+    ============================================================ -->
+    <main class="main" id="main-content">
+
+        <!-- ===================== DASHBOARD ===================== -->
+        <section class="section active" id="section-dashboard">
+            <div class="dashboard-wrap">
+                <div class="container">
+
+                    <!-- Hero greeting -->
+                    <div class="dash-hero">
+                        <div class="dash-greeting">
+                            <h1>Welcome back, <span class="name-accent">Arjun</span> 👋</h1>
+                            <p>Manage your payments and transactions with ease.</p>
+                        </div>
+                        <div class="dash-date" id="current-date"></div>
+                    </div>
+
+                    <!-- Balance card + stats -->
+                    <div class="dash-top-grid">
+
+                        <!-- Balance Card -->
+                        <div class="balance-card" id="balance-card">
+                            <div class="balance-card-top">
+                                <span class="balance-tag">Available Balance</span>
+                                <div class="balance-dots" aria-hidden="true">···</div>
+                            </div>
+                            <div class="balance-amount-row">
+                                <span class="balance-sym">₹</span>
+                                <span class="balance-num" id="balance-display">24,580.00</span>
+                            </div>
+                            <div class="balance-card-footer">
+                                <div class="balance-upi">
+                                    <div class="balance-upi-label">UPI ID</div>
+                                    <div class="balance-upi-val">arjun@payflow</div>
+                                </div>
+                                <div class="balance-card-btns">
+                                    <button class="bal-btn" onclick="showSection('send')">Send</button>
+                                    <button class="bal-btn ghost" onclick="showSection('transactions')">History</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stats Grid -->
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon-box sent">↑</div>
+                                <div class="stat-body">
+                                    <span class="stat-lbl">Total Sent</span>
+                                    <span class="stat-val" id="stat-sent">₹0.00</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon-box received">↓</div>
+                                <div class="stat-body">
+                                    <span class="stat-lbl">Total Received</span>
+                                    <span class="stat-val" id="stat-received">₹0.00</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon-box success">✓</div>
+                                <div class="stat-body">
+                                    <span class="stat-lbl">Successful</span>
+                                    <span class="stat-val" id="stat-successful">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon-box pending">⏱</div>
+                                <div class="stat-body">
+                                    <span class="stat-lbl">Pending</span>
+                                    <span class="stat-val" id="stat-pending">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-section">
+                        <h2 class="section-heading">Quick Actions</h2>
+                        <div class="quick-grid">
+                            <button class="quick-card qc-send" onclick="showSection('send')">
+                                <div class="qc-icon">↗</div>
+                                <span>Send Money</span>
+                            </button>
+                            <button class="quick-card qc-request" onclick="showNotAvailable()">
+                                <div class="qc-icon">↙</div>
+                                <span>Request Money</span>
+                            </button>
+                            <button class="quick-card qc-add" onclick="showNotAvailable()">
+                                <div class="qc-icon">＋</div>
+                                <span>Add Money</span>
+                            </button>
+                            <button class="quick-card qc-history" onclick="showSection('transactions')">
+                                <div class="qc-icon">☰</div>
+                                <span>Transactions</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Unavailable notice -->
+                    <div class="notice-bar" id="notice-bar" role="alert">
+                        <span>This feature is currently unavailable.</span>
+                        <button onclick="hideNotAvailable()" aria-label="Dismiss notice">✕</button>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="recent-section">
+                        <div class="row-between">
+                            <h2 class="section-heading mb-0">Recent Transactions</h2>
+                            <button class="link-btn" onclick="showSection('transactions')">View All →</button>
+                        </div>
+                        <div class="txn-list" id="recent-txn-list"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== SEND MONEY ===================== -->
+        <section class="section" id="section-send">
+            <div class="send-wrap">
+                <div class="container">
+                    <div class="form-outer">
+                        <div class="form-card">
+
+                            <!-- View 1: Payment Form -->
+                            <div id="view-form">
+                                <div class="form-card-head">
+                                    <h2>Send Money</h2>
+                                    <p>Transfer money instantly to anyone</p>
+                                </div>
+
+                                <form id="payment-form" onsubmit="return false;" novalidate>
+
+                                    <!-- Recipient field -->
+                                    <div class="form-field">
+                                        <label for="recipient-input" class="form-lbl">Recipient</label>
+                                        <div class="input-wrap">
+                                            <span class="input-pfx" aria-hidden="true">@</span>
+                                            <input
+                                                type="text"
+                                                id="recipient-input"
+                                                class="form-input"
+                                                placeholder="Phone number or UPI ID"
+                                                autocomplete="off"
+                                                spellcheck="false"
+                                            >
+                                        </div>
+                                        <span class="field-err" id="err-recipient" role="alert"></span>
+                                    </div>
+
+                                    <!-- Amount field -->
+                                    <div class="form-field">
+                                        <label for="amount" class="form-lbl">Amount</label>
+                                        <div class="input-wrap">
+                                            <span class="input-pfx" aria-hidden="true">₹</span>
+                                            <input
+                                                type="number"
+                                                id="amount"
+                                                class="form-input"
+                                                placeholder="0.00"
+                                                min="1"
+                                                step="0.01"
+                                            >
+                                        </div>
+                                        <span class="field-err" id="err-amount" role="alert"></span>
+                                    </div>
+
+                                    <!-- Note field — HTML Bug: label 'for' attribute doesn't match input 'id' -->
+                                    <div class="form-field">
+                                        <label for="note-field" class="form-lbl">
+                                            Note <span class="lbl-opt">(Optional)</span>
+                                        </label>
+                                        <div class="input-wrap">
+                                            <span class="input-pfx" aria-hidden="true">✎</span>
+                                            <input
+                                                type="text"
+                                                id="payment-note"
+                                                class="form-input"
+                                                placeholder="Add a note"
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <!-- Balance hint -->
+                                    <div class="balance-hint">
+                                        <span>Available Balance</span>
+                                        <span id="form-balance-hint">₹24,580.00</span>
+                                    </div>
+
+                                    <button type="button" class="btn btn-primary btn-block" onclick="handleContinue()">
+                                        Continue
+                                    </button>
+
+                                </form>
+                            </div>
+
+                            <!-- View 2: Payment Review -->
+                            <div id="view-review" class="hidden">
+                                <div class="step-head">
+                                    <h3>Review Payment</h3>
+                                    <p>Verify the details before confirming your payment.</p>
+                                </div>
+
+                                <div class="detail-table">
+                                    <div class="detail-row">
+                                        <span class="detail-key">Recipient</span>
+                                        <span class="detail-val" id="review-recipient"></span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-key">Amount</span>
+                                        <span class="detail-val review-amount" id="review-amount"></span>
+                                    </div>
+                                    <div class="detail-row" id="review-note-row">
+                                        <span class="detail-key">Note</span>
+                                        <span class="detail-val" id="review-note"></span>
+                                    </div>
+                                </div>
+
+                                <div class="review-actions">
+                                    <button class="btn btn-secondary" onclick="handleEdit()">Edit Details</button>
+                                    <button class="btn btn-primary" id="confirm-btn" onclick="handleConfirm()">Confirm Payment</button>
+                                </div>
+                            </div>
+
+                            <!-- View 3: Payment Result -->
+                            <div id="view-result" class="hidden">
+                                <div class="result-success">
+                                    <div class="result-icon" aria-hidden="true">✓</div>
+                                    <h3>Payment Successful!</h3>
+                                    <p class="result-sub" id="result-subtext"></p>
+                                </div>
+
+                                <div class="detail-table">
+                                    <div class="detail-row">
+                                        <span class="detail-key">Recipient</span>
+                                        <span class="detail-val" id="result-recipient"></span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-key">Amount</span>
+                                        <span class="detail-val" id="result-amount"></span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-key">Transaction ID</span>
+                                        <span class="detail-val txn-id-val" id="result-txn-id"></span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-key">Date &amp; Time</span>
+                                        <span class="detail-val" id="result-date"></span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-key">Status</span>
+                                        <span class="status-badge badge-success">Successful</span>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn btn-primary btn-block" onclick="handleDone()">Done</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== TRANSACTIONS ===================== -->
+        <section class="section" id="section-transactions">
+            <div class="txn-page-wrap">
+                <div class="container">
+
+                    <header class="page-hdr">
+                        <h2>Transaction History</h2>
+                        <p>Track all your payment activity in one place.</p>
+                    </header>
+
+                    <!-- Payment Summary -->
+                    <div class="summary-row">
+                        <div class="summary-card">
+                            <div class="sum-icon-box sent">↑</div>
+                            <div class="sum-body">
+                                <span class="sum-lbl">Total Sent</span>
+                                <span class="sum-val" id="summary-sent">₹0.00</span>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="sum-icon-box received">↓</div>
+                            <div class="sum-body">
+                                <span class="sum-lbl">Total Received</span>
+                                <span class="sum-val" id="summary-received">₹0.00</span>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="sum-icon-box count">✓</div>
+                            <div class="sum-body">
+                                <span class="sum-lbl">Successful Payments</span>
+                                <span class="sum-val" id="summary-successful">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter -->
+                    <div class="filter-bar">
+                        <div class="search-box">
+                            <span class="search-ico" aria-hidden="true">🔍</span>
+                            <input
+                                type="search"
+                                id="search-input"
+                                class="search-input"
+                                placeholder="Search transactions..."
+                                oninput="handleSearch()"
+                                autocomplete="off"
+                                aria-label="Search transactions"
+                            >
+                        </div>
+                        <div class="filter-pills" role="group" aria-label="Filter by type">
+                            <button class="filter-pill active" data-filter="all"      onclick="applyFilter('all')">All</button>
+                            <button class="filter-pill"        data-filter="sent"     onclick="applyFilter('sent')">Sent</button>
+                            <button class="filter-pill"        data-filter="received" onclick="applyFilter('received')">Received</button>
+                            <button class="filter-pill"        data-filter="pending"  onclick="applyFilter('pending')">Pending</button>
+                            <button class="filter-pill"        data-filter="failed"   onclick="applyFilter('failed')">Failed</button>
+                        </div>
+                    </div>
+
+                    <!-- Transaction List -->
+                    <div class="txn-list" id="txn-list"></div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state hidden" id="empty-state">
+                        <span class="empty-ico" aria-hidden="true">📋</span>
+                        <p>No transactions found.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================
+         FOOTER
+    ============================================================ -->
+    <footer class="footer" id="site-footer">
+        <div class="footer-body">
+
+            <div class="footer-col">
+                <div class="footer-brand">
+                    <div class="footer-logo">₹</div>
+                    <span class="footer-name">PayFlow</span>
+                </div>
+                <p class="footer-tagline">Simple payments. Smarter transactions.</p>
+            </div>
+
+            <div class="footer-col">
+                <p class="footer-col-hd">Navigation</p>
+                <ul class="footer-links">
+                    <li><a onclick="showSection('dashboard')">Home</a></li>
+                    <li><a onclick="showSection('send')">Send Money</a></li>
+                    <li><a onclick="showSection('transactions')">Transactions</a></li>
+                    <li><a>About</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <p class="footer-col-hd">About PayFlow</p>
+                <p class="footer-desc">A simulated digital payment platform designed for learning, debugging, and exploring modern fintech UI patterns.</p>
+            </div>
+
+        </div>
+        <div class="footer-bar">
+            <p>© 2026 PayFlow. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
