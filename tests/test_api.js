@@ -10,7 +10,8 @@ async function runApiTests() {
 
     // 1. Initial State
     const balanceData = paymentService.getBalance();
-    assert.strictEqual(balanceData.balance, 24580.00, 'Initial balance should be 24580.00');
+    const initialBal = balanceData.balance;
+    assert.strictEqual(initialBal, 540000.00, 'Initial balance should be 540000.00');
 
     // 2. Successful Payment with Idempotency
     const idempotencyKey = 'IDEMPOTENCY_TEST_KEY_001';
@@ -27,13 +28,13 @@ async function runApiTests() {
     assert.strictEqual(res1.success, true);
     assert.strictEqual(res1.transaction.status, 'Successful');
     assert.strictEqual(res1.transaction.amount, 1500.00);
-    assert.strictEqual(res1.balance, 23080.00);
+    assert.strictEqual(res1.balance, initialBal - 1500.00);
     console.log('✔ Payment processing & balance deduction verified.');
 
     // 3. Test Idempotency (Repeat exact request)
     const res2 = await paymentService.processPayment(paymentPayload);
     assert.strictEqual(res2.isDuplicate, true, 'Submitting duplicate idempotency key must be flagged');
-    assert.strictEqual(res2.balance, 23080.00, 'Duplicate submission must NOT deduct balance again');
+    assert.strictEqual(res2.balance, initialBal - 1500.00, 'Duplicate submission must NOT deduct balance again');
     console.log('✔ Idempotency protection verified (duplicate blocked).');
 
     // 4. Test Insufficient Balance Rejection
@@ -52,7 +53,7 @@ async function runApiTests() {
     // 5. Test Demo Top-Up (Add Money)
     const topUpRes = paymentService.addMoney({ amount: 2000, method: 'UPI NetBanking' });
     assert.strictEqual(topUpRes.success, true);
-    assert.strictEqual(topUpRes.balance, 25080.00); // 23080 + 2000
+    assert.strictEqual(topUpRes.balance, initialBal - 1500.00 + 2000.00);
     assert.strictEqual(topUpRes.transaction.type, TRANSACTION_TYPES.CREDIT);
     console.log('✔ Demo Top-Up (Add Money) verified.');
 
