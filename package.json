@@ -1,0 +1,25 @@
+{
+  "name": "payflow-payment-application",
+  "version": "2.0.0",
+  "description": "PayFlow — Modern Financial Dashboard & Payment Simulator with 3D UI, GSAP animations, and Twilio SMS/Voice integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/test_logic.js"
+  },
+  "keywords": [
+    "fintech",
+    "payment",
+    "dashboard",
+    "3d-ui",
+    "twilio",
+    "code-revive"
+  ],
+  "author": "TechTycoons Code-Revive Team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

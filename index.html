@@ -3,419 +3,1486 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PayFlow — Simple payments. Smarter transactions. Send money, track your history, and manage digital payments instantly.">
-    <title>PayFlow — Simple Payments. Smarter Transactions.</title>
+    <meta name="description" content="PaySphere — Intelligent Secure Payments. Autonomous risk detection, real-time fraud monitoring, and automated Twilio SMS & Voice alerts.">
+    <title>PaySphere — Intelligent Secure Payments</title>
+    
+    <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- External Animation & Confetti Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="dark-theme">
 
-    <!-- ============================================================
-         NAVBAR
-    ============================================================ -->
-    <nav class="navbar" id="main-navbar">
-        <div class="nav-container">
+    <div class="app-layout">
 
-            <div class="nav-brand" onclick="showSection('dashboard')">
-                <div class="nav-brand-icon">₹</div>
-                <span class="nav-brand-name">PayFlow</span>
+        <!-- ============================================================
+             LEFT SIDEBAR NAVIGATION
+        ============================================================ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand" onclick="showSection('dashboard')">
+                    <div class="brand-logo-glow">
+                        <div class="brand-icon">🛡️</div>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-title">PaySphere</span>
+                        <span class="brand-subtitle">Secure Payments</span>
+                    </div>
+                </div>
             </div>
 
-            <ul class="nav-links" id="nav-links">
-                <li><a class="nav-link active" id="nav-home"         onclick="showSection('dashboard')">Home</a></li>
-                <li><a class="nav-link"         id="nav-send"         onclick="showSection('send')">Send Money</a></li>
-                <li><a class="nav-link"         id="nav-transactions" onclick="showSection('transactions')">Transactions</a></li>
-                <li><a class="nav-link"         id="nav-about"        onclick="scrollToFooter()">About</a></li>
-            </ul>
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a class="sidebar-link active" id="nav-home" onclick="showSection('dashboard')">
+                            <span class="nav-ico">📊</span>
+                            <span class="nav-txt">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-send" onclick="showSection('send')">
+                            <span class="nav-ico">↗️</span>
+                            <span class="nav-txt">Send Money</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-receive" onclick="openRequestModal()">
+                            <span class="nav-ico">📥</span>
+                            <span class="nav-txt">Receive Money</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-transactions" onclick="showSection('transactions')">
+                            <span class="nav-ico">☰</span>
+                            <span class="nav-txt">Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-analytics" onclick="showSection('analytics')">
+                            <span class="nav-ico">📈</span>
+                            <span class="nav-txt">Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-beneficiaries" onclick="showBeneficiariesModal()">
+                            <span class="nav-ico">👥</span>
+                            <span class="nav-txt">Beneficiaries</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-security" onclick="showSection('security')">
+                            <span class="nav-ico">🛡️</span>
+                            <span class="nav-txt">Fraud &amp; Security</span>
+                            <span class="nav-badge-alert" id="sidebar-alert-badge">1</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-alerts" onclick="openAlertsDrawer()">
+                            <span class="nav-ico">🔔</span>
+                            <span class="nav-txt">Alerts</span>
+                            <span class="nav-badge-alert">1</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-settings" onclick="openSettingsModal()">
+                            <span class="nav-ico">⚙️</span>
+                            <span class="nav-txt">Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-help" onclick="scrollToFooter()">
+                            <span class="nav-ico">❓</span>
+                            <span class="nav-txt">Help &amp; Support</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" id="nav-logout" href="/login">
+                            <span class="nav-ico">🚪</span>
+                            <span class="nav-txt">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
-            <div class="nav-end">
-                <div class="nav-avatar" id="nav-avatar" title="Arjun Kumar">AK</div>
-                <button class="nav-menu-btn" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+            <div class="sidebar-footer">
+                <div class="ssl-shield-badge">
+                    <span class="ssl-icon">🔒</span>
+                    <div class="ssl-text">
+                        <strong>Secure &amp; Protected</strong>
+                        <span>256-bit SSL Encryption</span>
+                    </div>
+                </div>
             </div>
+        </aside>
 
-        </div>
-    </nav>
+        <!-- ============================================================
+             MAIN CONTENT AREA
+        ============================================================ -->
+        <div class="main-wrapper">
 
-    <!-- ============================================================
-         MAIN CONTENT
-    ============================================================ -->
-    <main class="main" id="main-content">
+            <!-- Top Header -->
+            <header class="top-header" id="main-navbar">
+                <div class="header-left">
+                    <button class="mobile-sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle Sidebar">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <div class="greeting-box">
+                        <h1>Good Morning, <span class="name-accent">Vikram</span> 👋</h1>
+                        <p>Here's what's happening with your account today.</p>
+                    </div>
+                </div>
 
-        <!-- ===================== DASHBOARD ===================== -->
-        <section class="section active" id="section-dashboard">
-            <div class="dashboard-wrap">
-                <div class="container">
+                <div class="header-center">
+                    <div class="header-search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="global-search" placeholder="Search anything... (name, UPI, txn ID)" oninput="handleGlobalSearch(this.value)">
+                    </div>
+                </div>
 
-                    <!-- Hero greeting -->
-                    <div class="dash-hero">
-                        <div class="dash-greeting">
-                            <h1>Welcome back, <span class="name-accent">Arjun</span> 👋</h1>
-                            <p>Manage your payments and transactions with ease.</p>
-                        </div>
-                        <div class="dash-date" id="current-date"></div>
+                <div class="header-right">
+                    <!-- Live Twilio Status Pill -->
+                    <div class="twilio-pill" id="nav-twilio-status" title="Twilio Integration Status">
+                        <span class="status-dot"></span>
+                        <span class="status-txt">Twilio: Simulation</span>
                     </div>
 
-                    <!-- Balance card + stats -->
-                    <div class="dash-top-grid">
+                    <button class="header-icon-btn" onclick="openAlertsDrawer()" aria-label="Security Alerts">
+                        <span class="icon">🔔</span>
+                        <span class="icon-badge">2</span>
+                    </button>
 
-                        <!-- Balance Card -->
-                        <div class="balance-card" id="balance-card">
-                            <div class="balance-card-top">
-                                <span class="balance-tag">Available Balance</span>
-                                <div class="balance-dots" aria-hidden="true">···</div>
-                            </div>
-                            <div class="balance-amount-row">
-                                <span class="balance-sym">₹</span>
-                                <span class="balance-num" id="balance-display">24,580.00</span>
-                            </div>
-                            <div class="balance-card-footer">
-                                <div class="balance-upi">
-                                    <div class="balance-upi-label">UPI ID</div>
-                                    <div class="balance-upi-val">arjun@payflow</div>
+                    <div class="user-profile-widget" onclick="openProfileModal()">
+                        <div class="user-avatar">VK</div>
+                        <div class="user-info">
+                            <span class="user-name">Vikram Singh</span>
+                            <span class="user-role">Verified Account</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Dynamic Container -->
+            <main class="content-body" id="main-content">
+
+                <!-- ============================================================
+                     SECTION 1: DASHBOARD
+                ============================================================ -->
+                <section class="section active" id="section-dashboard">
+
+                    <!-- TOP ROW: 3D Balance Card Grid & Unusual Transaction Alert Card -->
+                    <div class="dashboard-top-grid">
+
+                        <!-- LEFT: 3D Holographic Balance Card & Quick Actions -->
+                        <div class="balance-column-wrapper">
+                            <div class="card-3d-scene" id="card-scene">
+                                <div class="balance-card" id="balance-card">
+                                    <div class="card-glare" id="card-glare"></div>
+                                    
+                                    <div class="balance-card-top">
+                                        <div class="bal-label-group">
+                                            <span class="balance-tag">Current Balance</span>
+                                            <button class="eye-toggle-btn" onclick="toggleBalanceMask()" aria-label="Toggle balance visibility">👁️</button>
+                                        </div>
+                                        <span class="card-chip-symbol" aria-hidden="true"></span>
+                                    </div>
+
+                                    <div class="balance-amount-row">
+                                        <span class="balance-sym">₹</span>
+                                        <span class="balance-num" id="balance-display">5,40,000.00</span>
+                                    </div>
+
+                                    <div class="balance-sub-row">
+                                        <div class="available-box">
+                                            <span class="sub-lbl">Available Balance</span>
+                                            <span class="sub-val" id="available-balance-display">₹5,40,000.00</span>
+                                        </div>
+                                        <div class="monthly-delta-badge" id="balance-trend">
+                                            + ₹2,500.00 This Month
+                                        </div>
+                                    </div>
+
+                                    <div class="card-pedestal-glow" aria-hidden="true"></div>
                                 </div>
-                                <div class="balance-card-btns">
-                                    <button class="bal-btn" onclick="showSection('send')">Send</button>
-                                    <button class="bal-btn ghost" onclick="showSection('transactions')">History</button>
+                            </div>
+
+                            <!-- Quick Action Buttons Attached to Balance Area -->
+                            <div class="quick-actions-strip">
+                                <button class="qa-btn" onclick="showSection('send')">
+                                    <div class="qa-ico-box plane">✈️</div>
+                                    <span>Send Money</span>
+                                </button>
+                                <button class="qa-btn" onclick="openRequestModal()">
+                                    <div class="qa-ico-box download">📥</div>
+                                    <span>Receive Money</span>
+                                </button>
+                                <button class="qa-btn" onclick="showSection('transactions')">
+                                    <div class="qa-ico-box list">☰</div>
+                                    <span>View Transactions</span>
+                                </button>
+                                <button class="qa-btn" onclick="openTopUpModal()">
+                                    <div class="qa-ico-box plus">💳</div>
+                                    <span>Add Money</span>
+                                </button>
+                            </div>
+
+                            <!-- Sparkline Statistics Bar -->
+                            <div class="sparkline-stats-bar">
+                                <div class="stat-mini-item">
+                                    <span class="stat-mini-lbl">Total Transactions</span>
+                                    <div class="stat-mini-row">
+                                        <span class="stat-mini-val" id="stat-total-txns">128</span>
+                                        <span class="sparkline blue">∿∿∿</span>
+                                    </div>
+                                </div>
+                                <div class="stat-mini-item">
+                                    <span class="stat-mini-lbl">Successful</span>
+                                    <div class="stat-mini-row">
+                                        <span class="stat-mini-val text-success" id="stat-successful">112</span>
+                                        <span class="sparkline green">∿∿∿</span>
+                                    </div>
+                                </div>
+                                <div class="stat-mini-item">
+                                    <span class="stat-mini-lbl">Sent Amount</span>
+                                    <div class="stat-mini-row">
+                                        <span class="stat-mini-val" id="stat-sent">₹45,250</span>
+                                        <span class="sparkline purple">∿∿∿</span>
+                                    </div>
+                                </div>
+                                <div class="stat-mini-item">
+                                    <span class="stat-mini-lbl">Received Amount</span>
+                                    <div class="stat-mini-row">
+                                        <span class="stat-mini-val text-success" id="stat-received">₹32,850</span>
+                                        <span class="sparkline green">∿∿∿</span>
+                                    </div>
+                                </div>
+                                <div class="stat-mini-item">
+                                    <span class="stat-mini-lbl">Failed</span>
+                                    <div class="stat-mini-row">
+                                        <span class="stat-mini-val text-danger" id="stat-failed">05</span>
+                                        <span class="sparkline red">∿∿∿</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Security Metric Chips -->
+                            <div class="metric-chips-row">
+                                <div class="metric-chip alert-chip" onclick="openFlaggedTransactionDetails('TXN7892910291')">
+                                    <span class="chip-ico">⚠️</span>
+                                    <div class="chip-info">
+                                        <strong>Unusual Transactions</strong>
+                                        <span class="chip-tag red">1 Requires Attention &gt;</span>
+                                    </div>
+                                </div>
+                                <div class="metric-chip">
+                                    <span class="chip-ico">🛡️</span>
+                                    <div class="chip-info">
+                                        <strong>High Risk</strong>
+                                        <span>1 Transactions</span>
+                                    </div>
+                                </div>
+                                <div class="metric-chip">
+                                    <span class="chip-ico">💬</span>
+                                    <div class="chip-info">
+                                        <strong>SMS Alerts Sent</strong>
+                                        <span>1 This Month</span>
+                                    </div>
+                                </div>
+                                <div class="metric-chip">
+                                    <span class="chip-ico">📞</span>
+                                    <div class="chip-info">
+                                        <strong>Voice Calls Made</strong>
+                                        <span>1 This Month</span>
+                                    </div>
+                                </div>
+                                <div class="metric-chip">
+                                    <span class="chip-ico">✅</span>
+                                    <div class="chip-info">
+                                        <strong>Account Security</strong>
+                                        <span class="text-success font-bold">Excellent</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Stats Grid -->
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-icon-box sent">↑</div>
-                                <div class="stat-body">
-                                    <span class="stat-lbl">Total Sent</span>
-                                    <span class="stat-val" id="stat-sent">₹0.00</span>
+                        <!-- RIGHT: UNUSUAL TRANSACTION DETECTED ALERT CARD -->
+                        <div class="unusual-alert-card" id="unusual-alert-card">
+                            <div class="alert-card-glow" aria-hidden="true"></div>
+                            
+                            <div class="alert-card-header">
+                                <div class="alert-title-wrap">
+                                    <span class="siren-icon">⚠️</span>
+                                    <h3>UNUSUAL TRANSACTION DETECTED</h3>
+                                </div>
+                                <div class="siren-beacon-wrap">
+                                    <div class="siren-beacon-pulse"></div>
+                                    <div class="siren-beacon-core">🚨</div>
                                 </div>
                             </div>
-                            <div class="stat-card">
-                                <div class="stat-icon-box received">↓</div>
-                                <div class="stat-body">
-                                    <span class="stat-lbl">Total Received</span>
-                                    <span class="stat-val" id="stat-received">₹0.00</span>
+
+                            <p class="alert-lead-text">
+                                Our system detected an unusual transaction on your account. We have flagged this transaction and initiated security alerts.
+                            </p>
+
+                            <!-- Alert Parameters Grid -->
+                            <div class="alert-params-grid">
+                                <div class="param-box">
+                                    <span class="param-lbl">Amount</span>
+                                    <span class="param-val amount-val" id="alert-card-amount">₹45,000.00</span>
+                                </div>
+                                <div class="param-box">
+                                    <span class="param-lbl">Transaction ID</span>
+                                    <div class="param-id-row">
+                                        <span class="param-val mono-val" id="alert-card-txnid">TXN7892910291</span>
+                                        <button class="copy-tiny-btn" onclick="copyIdDirect('TXN7892910291')" title="Copy ID">📋</button>
+                                    </div>
+                                </div>
+                                <div class="param-box">
+                                    <span class="param-lbl">To</span>
+                                    <span class="param-val" id="alert-card-recipient">Unknown Recipient</span>
+                                </div>
+                                <div class="param-box">
+                                    <span class="param-lbl">Risk Level</span>
+                                    <span class="param-val risk-tag high" id="alert-card-risklevel">High</span>
+                                </div>
+                                <div class="param-box">
+                                    <span class="param-lbl">Date &amp; Time</span>
+                                    <span class="param-val" id="alert-card-datetime">14 May 2024, 10:25 AM</span>
+                                </div>
+                                <div class="param-box">
+                                    <span class="param-lbl">Reason</span>
+                                    <span class="param-val text-sm" id="alert-card-reason">Amount significantly higher than normal activity</span>
                                 </div>
                             </div>
-                            <div class="stat-card">
-                                <div class="stat-icon-box success">✓</div>
-                                <div class="stat-body">
-                                    <span class="stat-lbl">Successful</span>
-                                    <span class="stat-val" id="stat-successful">0</span>
+
+                            <!-- "What we are doing" Pipeline -->
+                            <div class="what-we-doing-section">
+                                <span class="doing-lbl">What we are doing</span>
+                                <div class="doing-steps-row">
+                                    <div class="doing-step active">
+                                        <div class="doing-dot">🚩</div>
+                                        <span>Transaction Flagged</span>
+                                    </div>
+                                    <div class="doing-line active"></div>
+                                    <div class="doing-step active">
+                                        <div class="doing-dot">🔍</div>
+                                        <span>Risk Analyzed</span>
+                                    </div>
+                                    <div class="doing-line active"></div>
+                                    <div class="doing-step active">
+                                        <div class="doing-dot">💬</div>
+                                        <span>SMS Alert Sent</span>
+                                    </div>
+                                    <div class="doing-line active"></div>
+                                    <div class="doing-step active">
+                                        <div class="doing-dot">📞</div>
+                                        <span>Voice Call Initiated</span>
+                                    </div>
+                                    <div class="doing-line active"></div>
+                                    <div class="doing-step active">
+                                        <div class="doing-dot">🎯</div>
+                                        <span>Monitoring</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="stat-card">
-                                <div class="stat-icon-box pending">⏱</div>
-                                <div class="stat-body">
-                                    <span class="stat-lbl">Pending</span>
-                                    <span class="stat-val" id="stat-pending">0</span>
-                                </div>
+
+                            <!-- Action Buttons -->
+                            <div class="alert-actions-row">
+                                <button class="btn btn-secondary" onclick="openFlaggedTransactionDetails('TXN7892910291')">
+                                    View Transaction Details
+                                </button>
+                                <button class="btn btn-danger-glow" onclick="triggerSecurityResponseWorkflow('TXN7892910291')">
+                                    Secure My Account
+                                </button>
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- Quick Actions -->
-                    <div class="quick-section">
-                        <h2 class="section-heading">Quick Actions</h2>
-                        <div class="quick-grid">
-                            <button class="quick-card qc-send" onclick="showSection('send')">
-                                <div class="qc-icon">↗</div>
-                                <span>Send Money</span>
-                            </button>
-                            <button class="quick-card qc-request" onclick="showNotAvailable()">
-                                <div class="qc-icon">↙</div>
-                                <span>Request Money</span>
-                            </button>
-                            <button class="quick-card qc-add" onclick="showNotAvailable()">
-                                <div class="qc-icon">＋</div>
-                                <span>Add Money</span>
-                            </button>
-                            <button class="quick-card qc-history" onclick="showSection('transactions')">
-                                <div class="qc-icon">☰</div>
-                                <span>Transactions</span>
-                            </button>
+                    <!-- ============================================================
+                         MIDDLE ROW: 5-STEP SECURITY RESPONSE WORKFLOW PIPELINE
+                    ============================================================ -->
+                    <div class="security-pipeline-container">
+                        <div class="pipeline-header">
+                            <div class="pipeline-title-group">
+                                <h2>Autonomous Security Response Workflow</h2>
+                                <p>End-to-end incident orchestration powered by Explainable Risk Analysis and Twilio SMS &amp; Voice infrastructure.</p>
+                            </div>
+                            <span class="live-pulse-badge">
+                                <span class="pulse-dot"></span> Real-Time Orchestration
+                            </span>
+                        </div>
+
+                        <div class="pipeline-cards-grid">
+
+                            <!-- Step 1: TRANSACTION DETECTED -->
+                            <div class="pipeline-card step-1" id="pipe-step-1">
+                                <div class="card-step-badge">
+                                    <span class="step-num">1</span>
+                                    <span class="step-title">TRANSACTION DETECTED</span>
+                                </div>
+                                <span class="step-subhead">System detects unusual activity</span>
+
+                                <div class="step-art hacker-art">
+                                    <div class="hacker-avatar">🧑‍💻</div>
+                                    <div class="floating-warning-icon">⚠️</div>
+                                </div>
+
+                                <div class="step-card-body">
+                                    <p class="highlight-desc">
+                                        <strong>₹45,000 payment</strong> to an unknown recipient was flagged as unusual.
+                                    </p>
+                                    <div class="mini-spec-table">
+                                        <div class="spec-row">
+                                            <span>Transaction ID</span>
+                                            <strong class="mono">TXN7892910291</strong>
+                                        </div>
+                                        <div class="spec-row">
+                                            <span>Amount</span>
+                                            <strong class="text-danger">₹45,000.00</strong>
+                                        </div>
+                                        <div class="spec-row">
+                                            <span>Risk Level</span>
+                                            <strong class="text-danger">High</strong>
+                                        </div>
+                                        <div class="spec-row">
+                                            <span>Status</span>
+                                            <strong class="text-warning">Flagged</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: RISK ANALYSIS -->
+                            <div class="pipeline-card step-2" id="pipe-step-2">
+                                <div class="card-step-badge green">
+                                    <span class="step-num">2</span>
+                                    <span class="step-title">RISK ANALYSIS</span>
+                                </div>
+                                <span class="step-subhead">Evaluating transaction risk</span>
+
+                                <!-- Animated Risk Score Speedometer / Gauge -->
+                                <div class="risk-gauge-container">
+                                    <div class="gauge-circle-wrap">
+                                        <svg class="gauge-svg" viewBox="0 0 160 160">
+                                            <circle class="gauge-track" cx="80" cy="80" r="68"></circle>
+                                            <circle class="gauge-fill" cx="80" cy="80" r="68" id="risk-gauge-circle"></circle>
+                                        </svg>
+                                        <div class="gauge-center-text">
+                                            <span class="gauge-lbl">RISK SCORE</span>
+                                            <span class="gauge-num" id="pipeline-risk-score">92<span class="denom">/100</span></span>
+                                            <span class="gauge-tier high">High Risk</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="risk-factors-block">
+                                    <strong class="factors-title">Risk Factors</strong>
+                                    <ul class="factors-list" id="pipeline-risk-factors">
+                                        <li>
+                                            <span class="dot red"></span>
+                                            <div>
+                                                <strong>Unusual Amount</strong>
+                                                <p>₹45,000 is higher than your typical transactions</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <span class="dot red"></span>
+                                            <div>
+                                                <strong>New Recipient</strong>
+                                                <p>You have not sent money to this recipient before</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <span class="dot amber"></span>
+                                            <div>
+                                                <strong>Time Pattern</strong>
+                                                <p>Transaction made at an unusual time</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: TWILIO SMS ALERT -->
+                            <div class="pipeline-card step-3" id="pipe-step-3">
+                                <div class="card-step-badge green">
+                                    <span class="step-num">3</span>
+                                    <span class="step-title">TWILIO SMS ALERT</span>
+                                </div>
+                                <span class="step-subhead">Security SMS sent to user</span>
+
+                                <!-- Phone Mockup: SMS View -->
+                                <div class="phone-mockup">
+                                    <div class="phone-screen">
+                                        <div class="phone-app-bar">
+                                            <span class="back-arrow">&lt;</span>
+                                            <span class="contact-name">PaySphere</span>
+                                            <span class="phone-time">10:25 AM</span>
+                                        </div>
+                                        <div class="sms-bubble">
+                                            <p><strong>PaySphere Fraud Alert:</strong> Unusual transaction of ₹45,000 to "Unknown Recipient" was flagged on Vikram's account.</p>
+                                            <p>Immediate action required. Call our 24/7 security desk.</p>
+                                            <p class="sms-txnid">Transaction ID: TXN7892910291</p>
+                                            <span class="sms-sign">- PaySphere Security Team</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="twilio-verified-strip">
+                                    <span class="check-circle">✓</span>
+                                    <span>SMS &amp; WhatsApp Sent via Twilio</span>
+                                </div>
+
+                                <div class="powered-by-twilio-logo">
+                                    <span class="tw-icon">🔴</span>
+                                    <span>twilio</span>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: TWILIO VOICE CALL -->
+                            <div class="pipeline-card step-4" id="pipe-step-4">
+                                <div class="card-step-badge purple">
+                                    <span class="step-num">4</span>
+                                    <span class="step-title">TWILIO VOICE CALL</span>
+                                </div>
+                                <span class="step-subhead">Automated voice call initiated</span>
+
+                                <!-- Phone Mockup: Calling Screen -->
+                                <div class="phone-mockup voice-call-screen">
+                                    <div class="phone-screen dark">
+                                        <div class="calling-header">
+                                            <span class="call-title">PaySphere Security</span>
+                                            <span class="call-number">+91 63045 89007</span>
+                                            <span class="call-status">Calling...</span>
+                                        </div>
+
+                                        <!-- Animated Audio Waveform -->
+                                        <div class="audio-waveform-wrap">
+                                            <span class="wave-bar w1"></span>
+                                            <span class="wave-bar w2"></span>
+                                            <span class="wave-bar w3"></span>
+                                            <span class="wave-bar w4"></span>
+                                            <span class="wave-bar w5"></span>
+                                            <span class="wave-bar w6"></span>
+                                            <span class="wave-bar w7"></span>
+                                        </div>
+
+                                        <div class="call-action-circle">
+                                            <span>📞</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="twilio-verified-strip">
+                                    <span class="check-circle">✓</span>
+                                    <span>Twilio Voice Call Initiated Successfully</span>
+                                </div>
+
+                                <div class="powered-by-twilio-logo">
+                                    <span class="tw-icon">🔴</span>
+                                    <span>twilio</span>
+                                </div>
+                            </div>
+
+                            <!-- Step 5: USER NOTIFIED -->
+                            <div class="pipeline-card step-5" id="pipe-step-5">
+                                <div class="card-step-badge blue">
+                                    <span class="step-num">5</span>
+                                    <span class="step-title">USER NOTIFIED</span>
+                                </div>
+                                <span class="step-subhead">User takes action</span>
+
+                                <div class="user-action-graphic">
+                                    <div class="user-shield-icon">🛡️</div>
+                                    <div class="user-portrait-emoji">🙋‍♂️</div>
+                                </div>
+
+                                <div class="checklist-box">
+                                    <div class="check-item done">
+                                        <span class="chk">✓</span>
+                                        <span>User notified via SMS</span>
+                                    </div>
+                                    <div class="check-item done">
+                                        <span class="chk">✓</span>
+                                        <span>Voice call initiated</span>
+                                    </div>
+                                    <div class="check-item done">
+                                        <span class="chk">✓</span>
+                                        <span>Transaction flagged</span>
+                                    </div>
+                                    <div class="check-item done">
+                                        <span class="chk">✓</span>
+                                        <span>Monitoring enabled</span>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary btn-block" onclick="openFlaggedTransactionDetails('TXN7892910291')">
+                                    Review &amp; Secure Account
+                                </button>
+                            </div>
+
                         </div>
                     </div>
 
-                    <!-- Unavailable notice -->
+                    <!-- ============================================================
+                         BOTTOM ROW: RECENT TRANSACTIONS SECTION
+                    ============================================================ -->
+                    <div class="recent-section">
+                        <div class="row-between">
+                            <h2 class="section-heading mb-0">Recent Transactions</h2>
+                            <button class="link-btn" onclick="showSection('transactions')">View All Transactions →</button>
+                        </div>
+                        <div class="txn-list" id="recent-txn-list"></div>
+                    </div>
+
+                    <!-- Notice bar preserved for compatibility -->
                     <div class="notice-bar" id="notice-bar" role="alert">
                         <span>This feature is currently unavailable.</span>
                         <button onclick="hideNotAvailable()" aria-label="Dismiss notice">✕</button>
                     </div>
 
-                    <!-- Recent Transactions -->
-                    <div class="recent-section">
-                        <div class="row-between">
-                            <h2 class="section-heading mb-0">Recent Transactions</h2>
-                            <button class="link-btn" onclick="showSection('transactions')">View All →</button>
-                        </div>
-                        <div class="txn-list" id="recent-txn-list"></div>
-                    </div>
+                </section>
 
-                </div>
-            </div>
-        </section>
+                <!-- ============================================================
+                     SECTION 2: SEND MONEY
+                ============================================================ -->
+                <section class="section" id="section-send">
+                    <div class="send-wrap">
+                        <div class="container">
+                            <div class="form-outer">
+                                <div class="form-card">
 
-        <!-- ===================== SEND MONEY ===================== -->
-        <section class="section" id="section-send">
-            <div class="send-wrap">
-                <div class="container">
-                    <div class="form-outer">
-                        <div class="form-card">
-
-                            <!-- View 1: Payment Form -->
-                            <div id="view-form">
-                                <div class="form-card-head">
-                                    <h2>Send Money</h2>
-                                    <p>Transfer money instantly to anyone</p>
-                                </div>
-
-                                <form id="payment-form" onsubmit="return false;" novalidate>
-
-                                    <!-- Recipient field -->
-                                    <div class="form-field">
-                                        <label for="recipient-input" class="form-lbl">Recipient</label>
-                                        <div class="input-wrap">
-                                            <span class="input-pfx" aria-hidden="true">@</span>
-                                            <input
-                                                type="text"
-                                                id="recipient-input"
-                                                class="form-input"
-                                                placeholder="Phone number or UPI ID"
-                                                autocomplete="off"
-                                                spellcheck="false"
-                                            >
+                                    <!-- View 1: Payment Form -->
+                                    <div id="view-form">
+                                        <div class="form-card-head">
+                                            <h2>Send Money</h2>
+                                            <p>Instant UPI transfer with autonomous risk scoring</p>
                                         </div>
-                                        <span class="field-err" id="err-recipient" role="alert"></span>
+
+                                        <form id="payment-form" onsubmit="return false;" novalidate>
+
+                                            <!-- Recipient field -->
+                                            <div class="form-field">
+                                                <label for="recipient-input" class="form-lbl">Recipient</label>
+                                                <div class="input-wrap">
+                                                    <span class="input-pfx" aria-hidden="true">@</span>
+                                                    <input
+                                                        type="text"
+                                                        id="recipient-input"
+                                                        class="form-input"
+                                                        placeholder="Phone number (10 digits) or UPI ID"
+                                                        autocomplete="off"
+                                                        spellcheck="false"
+                                                        oninput="previewRiskScore()"
+                                                    >
+                                                </div>
+                                                <span class="field-err" id="err-recipient" role="alert"></span>
+                                            </div>
+
+                                            <!-- Amount field -->
+                                            <div class="form-field">
+                                                <label for="amount" class="form-lbl">Amount</label>
+                                                <div class="input-wrap">
+                                                    <span class="input-pfx" aria-hidden="true">₹</span>
+                                                    <input
+                                                        type="number"
+                                                        id="amount"
+                                                        class="form-input"
+                                                        placeholder="0.00"
+                                                        min="1"
+                                                        step="0.01"
+                                                        oninput="previewRiskScore()"
+                                                    >
+                                                </div>
+                                                <span class="field-err" id="err-amount" role="alert"></span>
+                                            </div>
+
+                                            <!-- Note field — Bug 13 Fix preserved: label 'for' matches input 'id' -->
+                                            <div class="form-field">
+                                                <label for="payment-note" class="form-lbl">
+                                                    Note <span class="lbl-opt">(Optional)</span>
+                                                </label>
+                                                <div class="input-wrap">
+                                                    <span class="input-pfx" aria-hidden="true">✎</span>
+                                                    <input
+                                                        type="text"
+                                                        id="payment-note"
+                                                        class="form-input"
+                                                        placeholder="Add a note (e.g., Dinner split)"
+                                                        oninput="previewRiskScore()"
+                                                    >
+                                                </div>
+                                            </div>
+
+                                            <!-- Real-Time Pre-Submission Risk Preview Indicator -->
+                                            <div class="pre-risk-preview" id="pre-risk-preview">
+                                                <div class="risk-preview-hdr">
+                                                    <span class="preview-title">Real-Time Risk Analysis:</span>
+                                                    <span class="risk-badge low" id="preview-risk-badge">Low Risk (8/100)</span>
+                                                </div>
+                                                <p class="risk-preview-note" id="preview-risk-note">Standard recipient and amount within nominal threshold.</p>
+                                            </div>
+
+                                            <!-- Balance hint -->
+                                            <div class="balance-hint">
+                                                <span>Available Balance</span>
+                                                <span id="form-balance-hint">₹5,40,000.00</span>
+                                            </div>
+
+                                            <button type="button" class="btn btn-primary btn-block" onclick="handleContinue()">
+                                                Continue to Review
+                                            </button>
+
+                                        </form>
                                     </div>
 
-                                    <!-- Amount field -->
-                                    <div class="form-field">
-                                        <label for="amount" class="form-lbl">Amount</label>
-                                        <div class="input-wrap">
-                                            <span class="input-pfx" aria-hidden="true">₹</span>
-                                            <input
-                                                type="number"
-                                                id="amount"
-                                                class="form-input"
-                                                placeholder="0.00"
-                                                min="1"
-                                                step="0.01"
-                                            >
+                                    <!-- View 2: Payment Review -->
+                                    <div id="view-review" class="hidden">
+                                        <div class="step-head">
+                                            <h3>Review Payment</h3>
+                                            <p>Verify details, risk metrics, and Twilio security alert preferences.</p>
                                         </div>
-                                        <span class="field-err" id="err-amount" role="alert"></span>
-                                    </div>
 
-                                    <!-- Note field — HTML Bug: label 'for' attribute doesn't match input 'id' -->
-                                    <div class="form-field">
-                                        <label for="note-field" class="form-lbl">
-                                            Note <span class="lbl-opt">(Optional)</span>
-                                        </label>
-                                        <div class="input-wrap">
-                                            <span class="input-pfx" aria-hidden="true">✎</span>
-                                            <input
-                                                type="text"
-                                                id="payment-note"
-                                                class="form-input"
-                                                placeholder="Add a note"
-                                            >
+                                        <div class="detail-table">
+                                            <div class="detail-row">
+                                                <span class="detail-key">Recipient</span>
+                                                <span class="detail-val" id="review-recipient"></span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="detail-key">Amount</span>
+                                                <span class="detail-val review-amount" id="review-amount"></span>
+                                            </div>
+                                            <div class="detail-row" id="review-note-row">
+                                                <span class="detail-key">Note</span>
+                                                <span class="detail-val" id="review-note"></span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="detail-key">Calculated Risk Score</span>
+                                                <span class="detail-val" id="review-risk-val"><span class="risk-badge low">Low (10/100)</span></span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="detail-key">Transfer Method</span>
+                                                <span class="detail-val">PaySphere Instant UPI</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Twilio Security & Pre-Transaction Verification Gate -->
+                                        <div class="security-options-box" id="verification-gate-box">
+                                            <div class="sec-hdr">
+                                                <div class="sec-title">
+                                                    <span class="sec-icon">🔒</span>
+                                                    <span>Two-Factor Security Verification</span>
+                                                </div>
+                                                <div style="display:flex; gap:6px;">
+                                                    <span class="sec-badge" style="background:rgba(37,211,102,0.15); color:#25D366; border:1px solid rgba(37,211,102,0.3);">💬 WhatsApp Live</span>
+                                                    <span class="sec-badge" id="sec-provider-badge">Twilio Protected</span>
+                                                </div>
+                                            </div>
+
+                                            <p class="text-sm text-secondary" style="margin-top:4px;">
+                                                To authorize this transfer, PaySphere sent an SMS, Automated Call &amp; <strong>WhatsApp</strong> alert to: <strong>+91 63045 89007</strong> (Vikram Singh).
+                                            </p>
+
+                                            <!-- Real-Time Verification Status Banner -->
+                                            <div id="verification-live-banner" style="background: rgba(99, 102, 241, 0.12); border: 1.5px solid rgba(99, 102, 241, 0.4); border-radius: 10px; padding: 12px 14px; margin: 8px 0; display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center; gap: 10px;">
+                                                    <span id="verification-icon" style="font-size: 18px;">⏳</span>
+                                                    <div>
+                                                        <strong id="verification-title" style="display:block; font-size: 12px; color: #fff;">Awaiting Authorization…</strong>
+                                                        <span id="verification-desc" style="font-size: 11px; color: #94A3B8;">Reply <strong>1 to VERIFY</strong>, or <strong>2 to REJECT</strong> on your phone.</span>
+                                                    </div>
+                                                </div>
+                                                <span id="verification-timer-badge" class="risk-badge medium">Waiting…</span>
+                                            </div>
+
+                                            <!-- Automatic 1/2 Detection & Live Listener -->
+                                            <div class="auto-listening-panel" style="margin-top: 10px; background: rgba(15, 23, 42, 0.7); border: 1px dashed rgba(99, 102, 241, 0.35); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                                                <div style="display: flex; align-items: center; gap: 12px;">
+                                                    <span class="pulsing-radar-dot" style="width: 10px; height: 10px; background: #10B981; border-radius: 50%; box-shadow: 0 0 10px #10B981; animation: pulseGlow 1.5s infinite; flex-shrink: 0;"></span>
+                                                    <div>
+                                                        <span style="font-size: 13px; color: #fff; font-weight: 700; display: block;">Automatic 1 / 2 Detection Active</span>
+                                                        <span style="font-size: 11px; color: #94A3B8;">Instantly authorizes when you press <strong>1</strong> or <strong>2</strong> on your phone call, SMS/WhatsApp reply, or keyboard.</span>
+                                                    </div>
+                                                </div>
+                                                <div style="display: flex; align-items: center; gap: 10px;">
+                                                    <input type="text" id="verify-code-input" class="form-input form-input-sm" placeholder="Type 1 or 2..." maxlength="4" style="width: 110px; text-align: center; font-weight: bold; font-size: 14px;" oninput="handleAutoVerifyInput(this.value)">
+                                                    <kbd style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); padding: 5px 10px; border-radius: 6px; font-size: 12px; color: #34D399; font-weight: 800; cursor: pointer;" onclick="submitVerificationAction('1')" title="Press 1 on keyboard or phone to verify">[1] Verify</kbd>
+                                                    <kbd style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); padding: 5px 10px; border-radius: 6px; font-size: 12px; color: #F87171; font-weight: 800; cursor: pointer;" onclick="submitVerificationAction('2')" title="Press 2 on keyboard or phone to reject">[2] Reject</kbd>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="review-actions">
+                                            <button class="btn btn-secondary" onclick="handleEdit()">Edit Details</button>
+                                            <button class="btn btn-primary" id="confirm-btn" onclick="handleConfirm()" disabled style="opacity: 0.5; cursor: not-allowed;">
+                                                Confirm Payment (Awaiting 1 to Verify)
+                                            </button>
                                         </div>
                                     </div>
 
-                                    <!-- Balance hint -->
-                                    <div class="balance-hint">
-                                        <span>Available Balance</span>
-                                        <span id="form-balance-hint">₹24,580.00</span>
+                                    <!-- View 3: Payment Result -->
+                                    <div id="view-result" class="hidden">
+                                        <div class="result-success">
+                                            <div class="result-icon-wrap">
+                                                <div class="result-icon" aria-hidden="true">✓</div>
+                                            </div>
+                                            <h3>Payment Successful!</h3>
+                                            <p class="result-sub" id="result-subtext"></p>
+                                        </div>
+
+                                        <div class="detail-table">
+                                            <div class="detail-row">
+                                                <span class="detail-key">Recipient</span>
+                                                <span class="detail-val" id="result-recipient"></span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="detail-key">Amount</span>
+                                                <span class="detail-val" id="result-amount"></span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="detail-key">Transaction ID</span>
+                                                <span class="detail-val txn-id-val" id="result-txn-id"></span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="detail-key">Date &amp; Time</span>
+                                                <span class="detail-val" id="result-date"></span>
+                                            </div>
+                                            <div class="detail-row">
+                                                <span class="detail-key">Status</span>
+                                                <span class="status-badge badge-success">Successful</span>
+                                            </div>
+                                            <div class="detail-row" id="result-notification-row">
+                                                <span class="detail-key">Twilio Delivery</span>
+                                                <span class="detail-val text-muted" id="result-notification-status">Receipt Dispatched</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="result-btn-grid">
+                                            <button type="button" class="btn btn-secondary" onclick="openReceiptFromRecent()">
+                                                Receipt Slip
+                                            </button>
+                                            <button type="button" class="btn btn-primary" onclick="handleDone()">
+                                                Done
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <button type="button" class="btn btn-primary btn-block" onclick="handleContinue()">
-                                        Continue
-                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                                </form>
+                <!-- ============================================================
+                     SECTION 3: TRANSACTIONS
+                ============================================================ -->
+                <section class="section" id="section-transactions">
+                    <div class="txn-page-wrap">
+                        <div class="container">
+
+                            <header class="page-hdr">
+                                <h2>Transaction History</h2>
+                                <p>Real-time audit log of all incoming, outgoing, and security-flagged transactions.</p>
+                            </header>
+
+                            <!-- Payment Summary -->
+                            <div class="summary-row">
+                                <div class="summary-card">
+                                    <div class="sum-icon-box sent">↑</div>
+                                    <div class="sum-body">
+                                        <span class="sum-lbl">Total Sent</span>
+                                        <span class="sum-val" id="summary-sent">₹0.00</span>
+                                    </div>
+                                </div>
+                                <div class="summary-card">
+                                    <div class="sum-icon-box received">↓</div>
+                                    <div class="sum-body">
+                                        <span class="sum-lbl">Total Received</span>
+                                        <span class="sum-val" id="summary-received">₹0.00</span>
+                                    </div>
+                                </div>
+                                <div class="summary-card">
+                                    <div class="sum-icon-box count">✓</div>
+                                    <div class="sum-body">
+                                        <span class="sum-lbl">Successful Payments</span>
+                                        <span class="sum-val" id="summary-successful">0</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- View 2: Payment Review -->
-                            <div id="view-review" class="hidden">
-                                <div class="step-head">
-                                    <h3>Review Payment</h3>
-                                    <p>Verify the details before confirming your payment.</p>
+                            <!-- Search, Filter & Sort Bar -->
+                            <div class="filter-bar">
+                                <div class="search-box">
+                                    <span class="search-ico" aria-hidden="true">🔍</span>
+                                    <input
+                                        type="search"
+                                        id="search-input"
+                                        class="search-input"
+                                        placeholder="Search by name, UPI, note, or ID..."
+                                        oninput="handleSearch()"
+                                        autocomplete="off"
+                                        aria-label="Search transactions"
+                                    >
                                 </div>
+                                
+                                <div class="filter-controls-wrap">
+                                    <div class="filter-pills" role="group" aria-label="Filter by type or status">
+                                        <button class="filter-pill active" data-filter="all"        onclick="applyFilter('all')">All</button>
+                                        <button class="filter-pill"        data-filter="sent"       onclick="applyFilter('sent')">Sent</button>
+                                        <button class="filter-pill"        data-filter="received"   onclick="applyFilter('received')">Received</button>
+                                        <button class="filter-pill"        data-filter="pending"    onclick="applyFilter('pending')">Pending</button>
+                                        <button class="filter-pill"        data-filter="failed"     onclick="applyFilter('failed')">Failed</button>
+                                        <button class="filter-pill alert-pill" data-filter="flagged" onclick="applyFilter('flagged')">🚩 Flagged</button>
+                                    </div>
 
-                                <div class="detail-table">
-                                    <div class="detail-row">
-                                        <span class="detail-key">Recipient</span>
-                                        <span class="detail-val" id="review-recipient"></span>
+                                    <div class="sort-wrap">
+                                        <label for="sort-select" class="sort-lbl">Sort:</label>
+                                        <select id="sort-select" class="sort-select" onchange="handleSortChange(this.value)" aria-label="Sort transactions">
+                                            <option value="newest">Newest First</option>
+                                            <option value="oldest">Oldest First</option>
+                                            <option value="highest">Highest Amount</option>
+                                            <option value="lowest">Lowest Amount</option>
+                                            <option value="highest-risk">Highest Risk</option>
+                                        </select>
                                     </div>
-                                    <div class="detail-row">
-                                        <span class="detail-key">Amount</span>
-                                        <span class="detail-val review-amount" id="review-amount"></span>
-                                    </div>
-                                    <div class="detail-row" id="review-note-row">
-                                        <span class="detail-key">Note</span>
-                                        <span class="detail-val" id="review-note"></span>
-                                    </div>
-                                </div>
-
-                                <div class="review-actions">
-                                    <button class="btn btn-secondary" onclick="handleEdit()">Edit Details</button>
-                                    <button class="btn btn-primary" id="confirm-btn" onclick="handleConfirm()">Confirm Payment</button>
                                 </div>
                             </div>
 
-                            <!-- View 3: Payment Result -->
-                            <div id="view-result" class="hidden">
-                                <div class="result-success">
-                                    <div class="result-icon" aria-hidden="true">✓</div>
-                                    <h3>Payment Successful!</h3>
-                                    <p class="result-sub" id="result-subtext"></p>
-                                </div>
+                            <!-- Transaction List -->
+                            <div class="txn-list" id="txn-list"></div>
 
-                                <div class="detail-table">
-                                    <div class="detail-row">
-                                        <span class="detail-key">Recipient</span>
-                                        <span class="detail-val" id="result-recipient"></span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-key">Amount</span>
-                                        <span class="detail-val" id="result-amount"></span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-key">Transaction ID</span>
-                                        <span class="detail-val txn-id-val" id="result-txn-id"></span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-key">Date &amp; Time</span>
-                                        <span class="detail-val" id="result-date"></span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-key">Status</span>
-                                        <span class="status-badge badge-success">Successful</span>
-                                    </div>
-                                </div>
-
-                                <button type="button" class="btn btn-primary btn-block" onclick="handleDone()">Done</button>
+                            <!-- Empty State (Bug 6 Fix: Purely controlled by JS) -->
+                            <div class="empty-state hidden" id="empty-state">
+                                <span class="empty-ico" aria-hidden="true">📋</span>
+                                <h3>No transactions found</h3>
+                                <p id="empty-state-msg">Try clearing search keywords or switching filters.</p>
+                                <button class="btn btn-secondary btn-sm" onclick="resetFilters()">Reset All Filters</button>
                             </div>
 
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     SECTION 4: FRAUD & SECURITY CENTER
+                ============================================================ -->
+                <section class="section" id="section-security">
+                    <div class="security-page-wrap">
+                        <div class="container">
+                            <header class="page-hdr">
+                                <h2>Fraud &amp; Security Command Center</h2>
+                                <p>Autonomous risk detection, flagged accounts, and Twilio alert history.</p>
+                            </header>
+
+                            <div class="security-overview-grid">
+                                <div class="sec-stat-card">
+                                    <span class="sec-stat-lbl">Active High Risk Alerts</span>
+                                    <span class="sec-stat-val text-danger" id="sec-active-alerts">1</span>
+                                    <span class="sec-stat-note">Requires user review</span>
+                                </div>
+                                <div class="sec-stat-card">
+                                    <span class="sec-stat-lbl">Average Account Risk</span>
+                                    <span class="sec-stat-val text-success">14 / 100</span>
+                                    <span class="sec-stat-note">Nominal behavior</span>
+                                </div>
+                                <div class="sec-stat-card">
+                                    <span class="sec-stat-lbl">Twilio SMS Delivered</span>
+                                    <span class="sec-stat-val text-primary" id="sec-sms-count">1</span>
+                                    <span class="sec-stat-note">Security receipts</span>
+                                </div>
+                                <div class="sec-stat-card">
+                                    <span class="sec-stat-lbl">Twilio Voice Verification</span>
+                                    <span class="sec-stat-val text-purple" id="sec-voice-count">1</span>
+                                    <span class="sec-stat-note">Automated security calls</span>
+                                </div>
+                                <div class="sec-stat-card">
+                                    <span class="sec-stat-lbl">Twilio WhatsApp 2FA</span>
+                                    <span class="sec-stat-val" style="color: #25D366;" id="sec-wa-count">Active</span>
+                                    <span class="sec-stat-note">Multi-channel delivery</span>
+                                </div>
+                            </div>
+
+                            <!-- Active Security Alerts Feed -->
+                            <div class="active-alerts-section">
+                                <h3 class="section-heading">
+                                    <span>🛡️ Active Security Alerts &amp; Incidents</span>
+                                    <span class="risk-badge critical">1 Unresolved Incident</span>
+                                </h3>
+                                
+                                <div class="alerts-feed" id="alerts-feed-list">
+                                    <!-- Alert 1: Critical Flagged Transfer -->
+                                    <div class="alert-feed-item critical">
+                                        <div class="alert-item-header">
+                                            <div class="alert-item-left">
+                                                <div class="alert-item-icon">⚠️</div>
+                                                <div class="alert-item-title-group">
+                                                    <h4>High Velocity Outbound Transfer Flagged (₹45,000.00)</h4>
+                                                    <p>Autonomous AI heuristic flagged transfer to "Unknown Recipient" on Vikram's account</p>
+                                                </div>
+                                            </div>
+                                            <span class="risk-badge critical">CRITICAL (92/100)</span>
+                                        </div>
+                                        <div class="alert-item-body">
+                                            <p>This transaction exceeded normal historical volume by <strong>1,875%</strong> and was targeted to an unverified recipient handle. Twilio multi-channel incident alert was dispatched to Vikram (+91 63045 89007).</p>
+                                        </div>
+                                        <div class="alert-item-meta-row">
+                                            <span><strong>Txn ID:</strong> TXN7892910291</span>
+                                            <span>•</span>
+                                            <span><strong>Detection:</strong> Today, 10:24 AM</span>
+                                            <span>•</span>
+                                            <span><strong>Twilio Status:</strong> SMS &amp; Voice Call Dispatched</span>
+                                        </div>
+                                        <div class="alert-item-actions">
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="openFlaggedDrawer()">Review Incident Details</button>
+                                            <button type="button" class="btn btn-sm btn-secondary" onclick="triggerSecurityResponseWorkflow()">Re-trigger Twilio 2FA</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Alert 2: Pre-Transaction Verification Gate -->
+                                    <div class="alert-feed-item info">
+                                        <div class="alert-item-header">
+                                            <div class="alert-item-left">
+                                                <div class="alert-item-icon">🔒</div>
+                                                <div class="alert-item-title-group">
+                                                    <h4>Twilio Pre-Transaction 2FA Engine Active</h4>
+                                                    <p>Multi-channel verification enabled for outbound transfers</p>
+                                                </div>
+                                            </div>
+                                            <span class="risk-badge low">OPERATIONAL</span>
+                                        </div>
+                                        <div class="alert-item-body">
+                                            <p>All outbound fund movements require interactive user authorization: reply <strong>"1" to verify</strong> or <strong>"2" to reject</strong> via SMS, automated voice call keypad, or WhatsApp.</p>
+                                        </div>
+                                        <div class="alert-item-meta-row">
+                                            <span><strong>Target Phone:</strong> +91 63045 89007 (Vikram Singh)</span>
+                                            <span>•</span>
+                                            <span><strong>Channels:</strong> SMS (+16092157243), Voice, WhatsApp (+14155238886)</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Alert 3: Ledger Invariant Protection -->
+                                    <div class="alert-feed-item success">
+                                        <div class="alert-item-header">
+                                            <div class="alert-item-left">
+                                                <div class="alert-item-icon">✓</div>
+                                                <div class="alert-item-title-group">
+                                                    <h4>Ledger Invariant &amp; Double-Debit Protection Locked</h4>
+                                                    <p>All financial balances and debit calculations mathematically verified</p>
+                                                </div>
+                                            </div>
+                                            <span class="risk-badge low">PROTECTED</span>
+                                        </div>
+                                        <div class="alert-item-body">
+                                            <p>Account balance ₹5,40,000.00 matches system ledger. Total debit and credit invariants are verified and in sync with backend idempotency cache.</p>
+                                        </div>
+                                        <div class="alert-item-meta-row">
+                                            <span><strong>Current Balance:</strong> ₹5,40,000.00</span>
+                                            <span>•</span>
+                                            <span><strong>Invariants:</strong> 13/13 Logic Rules Verified</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     SECTION 5: ANALYTICS & INSIGHTS
+                ============================================================ -->
+                <section class="section" id="section-analytics">
+                    <div class="analytics-page-wrap">
+                        <div class="container">
+                            <header class="page-hdr">
+                                <h2>Financial &amp; Security Analytics</h2>
+                                <p>Real-time telemetry derived purely from verified transaction records.</p>
+                            </header>
+
+                            <!-- Analytics Top KPI Row -->
+                            <div class="analytics-kpi-grid">
+                                <div class="analytics-kpi-card">
+                                    <span class="kpi-lbl">Total 7-Day Inflow</span>
+                                    <span class="kpi-val" style="color: #34D399;">₹19,500.00</span>
+                                    <span class="kpi-trend text-success">↑ 14.8% vs last week</span>
+                                </div>
+                                <div class="analytics-kpi-card">
+                                    <span class="kpi-lbl">Total 7-Day Outflow</span>
+                                    <span class="kpi-val" style="color: #818CF8;">₹4,719.00</span>
+                                    <span class="kpi-trend text-secondary">7 verified transactions</span>
+                                </div>
+                                <div class="analytics-kpi-card">
+                                    <span class="kpi-lbl">Net Surplus Balance</span>
+                                    <span class="kpi-val" style="color: #fff;">+₹14,781.00</span>
+                                    <span class="kpi-trend text-success">Positive cash position</span>
+                                </div>
+                                <div class="analytics-kpi-card">
+                                    <span class="kpi-lbl">Security Threat Defense</span>
+                                    <span class="kpi-val" style="color: #F87171;">100%</span>
+                                    <span class="kpi-trend text-danger">1 high-risk transfer halted</span>
+                                </div>
+                            </div>
+
+                            <div class="analytics-charts-grid">
+                                <!-- Chart 1: Net Cashflow & Volume -->
+                                <div class="chart-card">
+                                    <div class="chart-header">
+                                        <h3>
+                                            <span>📊</span>
+                                            <span>Net Cashflow &amp; Volume</span>
+                                        </h3>
+                                        <div class="chart-legend">
+                                            <span><span class="legend-dot credit"></span>Credit (Inflow)</span>
+                                            <span><span class="legend-dot debit"></span>Debit (Outflow)</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="bar-chart-container" id="analytics-cashflow">
+                                        <div class="bar-chart-mock">
+                                            <div class="bar-group">
+                                                <div class="bar-track">
+                                                    <span class="bar-tooltip">₹1,200</span>
+                                                    <div class="bar debit" style="height: 55%;"></div>
+                                                </div>
+                                                <span class="bar-day-lbl">Mon</span>
+                                            </div>
+                                            <div class="bar-group">
+                                                <div class="bar-track">
+                                                    <span class="bar-tooltip">+₹5,000</span>
+                                                    <div class="bar credit" style="height: 85%;"></div>
+                                                </div>
+                                                <span class="bar-day-lbl">Tue</span>
+                                            </div>
+                                            <div class="bar-group">
+                                                <div class="bar-track">
+                                                    <span class="bar-tooltip">₹750</span>
+                                                    <div class="bar debit" style="height: 35%;"></div>
+                                                </div>
+                                                <span class="bar-day-lbl">Wed</span>
+                                            </div>
+                                            <div class="bar-group">
+                                                <div class="bar-track">
+                                                    <span class="bar-tooltip">₹2,349</span>
+                                                    <div class="bar debit" style="height: 70%;"></div>
+                                                </div>
+                                                <span class="bar-day-lbl">Thu</span>
+                                            </div>
+                                            <div class="bar-group">
+                                                <div class="bar-track">
+                                                    <span class="bar-tooltip">+₹12,000</span>
+                                                    <div class="bar credit" style="height: 100%;"></div>
+                                                </div>
+                                                <span class="bar-day-lbl">Fri</span>
+                                            </div>
+                                            <div class="bar-group">
+                                                <div class="bar-track">
+                                                    <span class="bar-tooltip">₹420</span>
+                                                    <div class="bar debit" style="height: 25%;"></div>
+                                                </div>
+                                                <span class="bar-day-lbl">Sat</span>
+                                            </div>
+                                            <div class="bar-group">
+                                                <div class="bar-track">
+                                                    <span class="bar-tooltip">+₹2,500</span>
+                                                    <div class="bar credit" style="height: 50%;"></div>
+                                                </div>
+                                                <span class="bar-day-lbl">Sun</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Chart 2: Risk Score Distribution -->
+                                <div class="chart-card">
+                                    <div class="chart-header">
+                                        <h3>
+                                            <span>🛡️</span>
+                                            <span>Risk Score Distribution</span>
+                                        </h3>
+                                        <span class="risk-badge low">7 Transcripts Evaluated</span>
+                                    </div>
+
+                                    <div class="risk-distribution-wrap">
+                                        <!-- Low Risk -->
+                                        <div class="risk-distribution-row">
+                                            <div class="dist-info-row">
+                                                <div class="dist-category">
+                                                    <span class="dot green"></span>
+                                                    <span>Low Risk (0–29)</span>
+                                                </div>
+                                                <div class="dist-meta">
+                                                    <span class="dist-count">6 Transactions</span>
+                                                    <span class="dist-pct text-success">85%</span>
+                                                </div>
+                                            </div>
+                                            <div class="dist-track">
+                                                <div class="dist-fill green" style="width: 85%;"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Medium Risk -->
+                                        <div class="risk-distribution-row">
+                                            <div class="dist-info-row">
+                                                <div class="dist-category">
+                                                    <span class="dot amber"></span>
+                                                    <span>Medium Risk (30–59)</span>
+                                                </div>
+                                                <div class="dist-meta">
+                                                    <span class="dist-count">1 Transaction</span>
+                                                    <span class="dist-pct" style="color: #FBBF24;">10%</span>
+                                                </div>
+                                            </div>
+                                            <div class="dist-track">
+                                                <div class="dist-fill amber" style="width: 10%;"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- High / Critical Risk -->
+                                        <div class="risk-distribution-row">
+                                            <div class="dist-info-row">
+                                                <div class="dist-category">
+                                                    <span class="dot red"></span>
+                                                    <span>High / Critical (60–100)</span>
+                                                </div>
+                                                <div class="dist-meta">
+                                                    <span class="dist-count">1 Flagged Incident</span>
+                                                    <span class="dist-pct text-danger">5%</span>
+                                                </div>
+                                            </div>
+                                            <div class="dist-track">
+                                                <div class="dist-fill red" style="width: 5%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="security-telemetry-strip">
+                                        <div class="telem-item">
+                                            <span class="telem-dot"></span>
+                                            <span>Zero Unauthorized Drifts</span>
+                                        </div>
+                                        <div class="telem-item">
+                                            <span class="telem-dot"></span>
+                                            <span>Twilio 2FA Verified</span>
+                                        </div>
+                                        <div class="telem-item">
+                                            <span class="telem-dot"></span>
+                                            <span>100% Idempotency Shield</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- ============================================================
+                 BOTTOM TRUST FOOTER BAR (From PaySphere Reference)
+            ============================================================ -->
+            <footer class="trust-footer-bar">
+                <div class="trust-container">
+                    <div class="trust-item">
+                        <span class="trust-ico">🛡️</span>
+                        <div class="trust-txt">
+                            <strong>Real-time Fraud Detection</strong>
+                            <span>AI-Powered Security</span>
+                        </div>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-ico">💬</span>
+                        <div class="trust-txt">
+                            <strong>Twilio SMS Alerts</strong>
+                            <span>Instant Notifications</span>
+                        </div>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-ico">📞</span>
+                        <div class="trust-txt">
+                            <strong>Twilio Voice Calls</strong>
+                            <span>Automated Security Calls</span>
+                        </div>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-ico">🕒</span>
+                        <div class="trust-txt">
+                            <strong>24/7 Monitoring</strong>
+                            <span>Always Protecting You</span>
+                        </div>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-ico">🔒</span>
+                        <div class="trust-txt">
+                            <strong>Bank-grade Security</strong>
+                            <span>256-bit Encryption</span>
+                        </div>
+                    </div>
+                    <div class="trust-item powered-twilio">
+                        <span>Powered by</span>
+                        <div class="twilio-badge-logo">
+                            <span class="tw-dot">🔴</span>
+                            <strong>twilio</strong>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </footer>
 
-        <!-- ===================== TRANSACTIONS ===================== -->
-        <section class="section" id="section-transactions">
-            <div class="txn-page-wrap">
-                <div class="container">
-
-                    <header class="page-hdr">
-                        <h2>Transaction History</h2>
-                        <p>Track all your payment activity in one place.</p>
-                    </header>
-
-                    <!-- Payment Summary -->
-                    <div class="summary-row">
-                        <div class="summary-card">
-                            <div class="sum-icon-box sent">↑</div>
-                            <div class="sum-body">
-                                <span class="sum-lbl">Total Sent</span>
-                                <span class="sum-val" id="summary-sent">₹0.00</span>
-                            </div>
-                        </div>
-                        <div class="summary-card">
-                            <div class="sum-icon-box received">↓</div>
-                            <div class="sum-body">
-                                <span class="sum-lbl">Total Received</span>
-                                <span class="sum-val" id="summary-received">₹0.00</span>
-                            </div>
-                        </div>
-                        <div class="summary-card">
-                            <div class="sum-icon-box count">✓</div>
-                            <div class="sum-body">
-                                <span class="sum-lbl">Successful Payments</span>
-                                <span class="sum-val" id="summary-successful">0</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Search & Filter -->
-                    <div class="filter-bar">
-                        <div class="search-box">
-                            <span class="search-ico" aria-hidden="true">🔍</span>
-                            <input
-                                type="search"
-                                id="search-input"
-                                class="search-input"
-                                placeholder="Search transactions..."
-                                oninput="handleSearch()"
-                                autocomplete="off"
-                                aria-label="Search transactions"
-                            >
-                        </div>
-                        <div class="filter-pills" role="group" aria-label="Filter by type">
-                            <button class="filter-pill active" data-filter="all"      onclick="applyFilter('all')">All</button>
-                            <button class="filter-pill"        data-filter="sent"     onclick="applyFilter('sent')">Sent</button>
-                            <button class="filter-pill"        data-filter="received" onclick="applyFilter('received')">Received</button>
-                            <button class="filter-pill"        data-filter="pending"  onclick="applyFilter('pending')">Pending</button>
-                            <button class="filter-pill"        data-filter="failed"   onclick="applyFilter('failed')">Failed</button>
-                        </div>
-                    </div>
-
-                    <!-- Transaction List -->
-                    <div class="txn-list" id="txn-list"></div>
-
-                    <!-- Empty State -->
-                    <div class="empty-state hidden" id="empty-state">
-                        <span class="empty-ico" aria-hidden="true">📋</span>
-                        <p>No transactions found.</p>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-    </main>
+        </div>
+    </div>
 
     <!-- ============================================================
-         FOOTER
+         DRAWER / MODAL: FLAGGED TRANSACTION DETAILS (Reference UI)
     ============================================================ -->
-    <footer class="footer" id="site-footer">
-        <div class="footer-body">
+    <div class="modal-overlay hidden" id="modal-flagged-details" role="dialog" aria-modal="true" aria-labelledby="flagged-modal-title">
+        <div class="modal-card flagged-drawer-card">
+            <div class="modal-head">
+                <h3 id="flagged-modal-title">FLAGGED TRANSACTION DETAILS</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-flagged-details')" aria-label="Close modal">✕</button>
+            </div>
 
-            <div class="footer-col">
-                <div class="footer-brand">
-                    <div class="footer-logo">₹</div>
-                    <span class="footer-name">PayFlow</span>
+            <!-- Drawer Tabs -->
+            <div class="drawer-tabs">
+                <button class="drawer-tab active" onclick="switchDrawerTab('details')">Details</button>
+                <button class="drawer-tab" onclick="switchDrawerTab('activity')">Activity</button>
+                <button class="drawer-tab" onclick="switchDrawerTab('alerts')">Alerts</button>
+                <button class="drawer-tab" onclick="switchDrawerTab('timeline')">Timeline</button>
+            </div>
+
+            <div class="modal-body" id="flagged-drawer-body">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="copyIdDirect('TXN7892910291')">
+                    <span>📋</span> Copy ID
+                </button>
+                <button class="btn btn-secondary" onclick="printReceiptSlip()">
+                    <span>📥</span> Download
+                </button>
+                <button class="btn btn-danger-glow" onclick="reportFlaggedTransaction('TXN7892910291')">
+                    <span>⚠️</span> Report / Block
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         STANDARD TRANSACTION DETAILS & RECEIPT MODAL
+    ============================================================ -->
+    <div class="modal-overlay hidden" id="modal-txn-details" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3 id="modal-title">Transaction Details</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-txn-details')" aria-label="Close modal">✕</button>
+            </div>
+            
+            <div class="modal-body" id="modal-txn-body">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="modal-copy-id-btn" onclick="copyModalTxnId()">
+                    <span>📋</span> Copy Txn ID
+                </button>
+                <button class="btn btn-primary" onclick="printReceiptSlip()">
+                    <span>🖨️</span> Download / Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         REQUEST MONEY MODAL
+    ============================================================ -->
+    <div class="modal-overlay hidden" id="modal-request" role="dialog" aria-modal="true" aria-labelledby="req-modal-title">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3 id="req-modal-title">Request Payment</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-request')" aria-label="Close modal">✕</button>
+            </div>
+            
+            <form onsubmit="handleRequestSubmit(event)">
+                <div class="modal-body">
+                    <div class="form-field">
+                        <label for="req-input-user" class="form-lbl">Request From (UPI ID or Phone)</label>
+                        <input type="text" id="req-input-user" class="form-input" placeholder="e.g. rahul@payflow or 9876543210" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="req-input-amount" class="form-lbl">Amount (₹)</label>
+                        <input type="number" id="req-input-amount" class="form-input" placeholder="500" min="1" step="0.01" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="req-input-note" class="form-lbl">Note</label>
+                        <input type="text" id="req-input-note" class="form-input" placeholder="Dinner share, rent split, etc.">
+                    </div>
                 </div>
-                <p class="footer-tagline">Simple payments. Smarter transactions.</p>
-            </div>
 
-            <div class="footer-col">
-                <p class="footer-col-hd">Navigation</p>
-                <ul class="footer-links">
-                    <li><a onclick="showSection('dashboard')">Home</a></li>
-                    <li><a onclick="showSection('send')">Send Money</a></li>
-                    <li><a onclick="showSection('transactions')">Transactions</a></li>
-                    <li><a>About</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <p class="footer-col-hd">About PayFlow</p>
-                <p class="footer-desc">A simulated digital payment platform designed for learning, debugging, and exploring modern fintech UI patterns.</p>
-            </div>
-
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-request')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Payment Request</button>
+                </div>
+            </form>
         </div>
-        <div class="footer-bar">
-            <p>© 2026 PayFlow. All rights reserved.</p>
+    </div>
+
+    <!-- ============================================================
+         DEMO TOP-UP (ADD MONEY) MODAL
+    ============================================================ -->
+    <div class="modal-overlay hidden" id="modal-topup" role="dialog" aria-modal="true" aria-labelledby="topup-modal-title">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3 id="topup-modal-title">Demo Wallet Top-Up</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-topup')" aria-label="Close modal">✕</button>
+            </div>
+            
+            <form onsubmit="handleTopUpSubmit(event)">
+                <div class="modal-body">
+                    <p class="text-sm text-secondary mb-3">Add simulated funds to your PaySphere wallet balance instantly.</p>
+                    
+                    <div class="chip-preset-grid">
+                        <button type="button" class="chip-btn" onclick="setTopUpAmount(500)">+₹500</button>
+                        <button type="button" class="chip-btn" onclick="setTopUpAmount(1000)">+₹1,000</button>
+                        <button type="button" class="chip-btn" onclick="setTopUpAmount(2000)">+₹2,000</button>
+                        <button type="button" class="chip-btn" onclick="setTopUpAmount(5000)">+₹5,000</button>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="topup-input-amount" class="form-lbl">Top-Up Amount (₹)</label>
+                        <input type="number" id="topup-input-amount" class="form-input" placeholder="Enter amount" min="1" step="1" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="topup-method-select" class="form-lbl">Funding Source</label>
+                        <select id="topup-method-select" class="form-input">
+                            <option value="HDFC Bank Demo NetBanking">HDFC Bank Demo NetBanking (••4192)</option>
+                            <option value="SBI Demo Debit Card">SBI Demo Debit Card (••9901)</option>
+                            <option value="Demo Instant UPI">Instant UPI Handle</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-topup')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Top-Up Wallet</button>
+                </div>
+            </form>
         </div>
-    </footer>
+    </div>
+
+    <!-- ============================================================
+         TOAST CONTAINER
+    ============================================================ -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Legacy site-footer compatibility -->
+    <div id="site-footer" style="display:none;"></div>
 
     <script src="script.js"></script>
 </body>

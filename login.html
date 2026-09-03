@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in to PaySphere — Secure Payments. Continuous fraud monitoring, live risk detection, and automated Twilio security alerts.">
+    <title>PaySphere — Sign In</title>
+
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- External Animation & Confetti -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* ============================================================
+           PAYSPHERE LOGIN PAGE STYLES
+           Faithfully matches reference design
+           ============================================================ */
+        :root {
+            --bg-left:         #070B14;
+            --bg-right:        #060913;
+            --bg-input:        #0D1424;
+            --border-input:    #1F2B48;
+            --border-focus:    #6366F1;
+            --primary:         #6366F1;
+            --primary-hover:   #4F46E5;
+            --primary-glow:    rgba(99, 102, 241, 0.45);
+            --accent-cyan:     #2DD4BF;
+            --accent-green:    #10B981;
+            --txt-main:        #FFFFFF;
+            --txt-sub:         #94A3B8;
+            --txt-muted:       #64748B;
+            --font:            'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono:       'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-left);
+            color: var(--txt-main);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .login-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100vw;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+           LEFT COLUMN: AUTHENTICATION FORM
+           ============================================================ */
+        .auth-panel {
+            background: var(--bg-left);
+            padding: 56px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            margin-bottom: 48px;
+        }
+
+        .brand-squircle {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.45);
+        }
+
+        .brand-diamond {
+            width: 14px;
+            height: 14px;
+            background: #FFFFFF;
+            transform: rotate(45deg);
+            border-radius: 2px;
+        }
+
+        .brand-text-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFFFFF;
+            letter-spacing: -0.4px;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--txt-muted);
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .auth-body-content {
+            max-width: 460px;
+            width: 100%;
+        }
+
+        .tag-welcome {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 800;
+            color: #818CF8;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .auth-headline {
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.2px;
+            color: #FFFFFF;
+            margin-bottom: 16px;
+        }
+
+        .auth-subheadline {
+            font-size: 15px;
+            color: var(--txt-sub);
+            line-height: 1.55;
+            margin-bottom: 36px;
+        }
+
+        /* Form Controls */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .form-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .field-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        .link-forgot {
+            font-size: 13px;
+            color: #818CF8;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .link-forgot:hover {
+            color: #FFFFFF;
+            text-decoration: underline;
+        }
+
+        .input-box-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border-input);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 14px;
+            font-family: var(--font);
+            color: #FFFFFF;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--border-focus);
+            background: #111A30;
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .form-input::placeholder {
+            color: var(--txt-muted);
+        }
+
+        /* Floating demo tooltip */
+        .demo-tooltip-badge {
+            position: absolute;
+            top: -38px;
+            right: 24px;
+            background: #1C2333;
+            border: 1px solid #2E3B5B;
+            color: #E2E8F0;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 8px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 5;
+            transition: all 0.2s;
+        }
+
+        .demo-tooltip-badge:hover {
+            background: #27334D;
+            border-color: #818CF8;
+            transform: translateY(-2px);
+        }
+
+        .demo-tooltip-badge::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 20px;
+            border-width: 6px 6px 0 6px;
+            border-style: solid;
+            border-color: #1C2333 transparent transparent transparent;
+        }
+
+        /* Password Show Toggle */
+        .btn-toggle-show {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--txt-muted);
+            font-size: 13px;
+            font-weight: 700;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .btn-toggle-show:hover {
+            color: #FFFFFF;
+        }
+
+        /* Options Row: Remember Me + 256-bit Encryption */
+        .auth-options-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0 8px;
+        }
+
+        .remember-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--txt-sub);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .remember-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .encryption-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .enc-diamond {
+            font-size: 12px;
+        }
+
+        /* Sign In Button */
+        .btn-signin {
+            width: 100%;
+            background: linear-gradient(135deg, #5D5FEF 0%, #4F46E5 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 24px;
+            font-size: 15px;
+            font-weight: 800;
+            font-family: var(--font);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 24px rgba(79, 70, 229, 0.45);
+            transition: all 0.25s ease;
+        }
+
+        .btn-signin:hover {
+            background: linear-gradient(135deg, #6B6DFF 0%, #4338CA 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.6);
+        }
+
+        .btn-signin:active {
+            transform: translateY(0);
+        }
+
+        .btn-arrow {
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .btn-signin:hover .btn-arrow {
+            transform: translateX(3px);
+        }
+
+        /* Bottom Footer Text */
+        .auth-footer-text {
+            font-size: 13px;
+            color: #34D399;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .auth-footer-text span {
+            color: var(--txt-muted);
+        }
+
+        /* ============================================================
+           RIGHT COLUMN: SECURITY MONITORING VISUAL PANEL
+           ============================================================ */
+        .visual-panel {
+            background: var(--bg-right);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 56px 64px;
+            overflow: hidden;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Background grid overlay */
+        .visual-grid-bg {
+            position: absolute;
+            inset: 0;
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            pointer-events: none;
+        }
+
+        /* Radial central glow behind shield */
+        .visual-radial-glow {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.35) 0%, rgba(99, 102, 241, 0.1) 40%, transparent 70%);
+            filter: blur(40px);
+            pointer-events: none;
+        }
+
+        /* Top Status Pill */
+        .monitoring-pill {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .status-dot-green {
+            width: 7px;
+            height: 7px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        /* Center Holographic Shield with Concentric Ripple Rings */
+        .shield-center-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 380px;
+            z-index: 2;
+        }
+
+        /* Concentric orbital circles */
+        .orbital-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            pointer-events: none;
+        }
+
+        .ring-1 {
+            width: 320px;
+            height: 180px;
+            border-color: rgba(99, 102, 241, 0.22);
+            transform: rotate(-10deg);
+        }
+
+        .ring-2 {
+            width: 440px;
+            height: 240px;
+            border-color: rgba(99, 102, 241, 0.15);
+            transform: rotate(-10deg);
+        }
+
+        .ring-3 {
+            width: 560px;
+            height: 300px;
+            border-color: rgba(99, 102, 241, 0.08);
+            transform: rotate(-10deg);
+        }
+
+        /* 3D Holographic Shield */
+        .shield-graphic-wrap {
+            position: relative;
+            width: 170px;
+            height: 210px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: floatShield 4s infinite ease-in-out;
+            cursor: pointer;
+        }
+
+        @keyframes floatShield {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        .shield-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 15px 35px rgba(124, 58, 237, 0.6));
+        }
+
+        .shield-inner-box {
+            position: absolute;
+            width: 42px;
+            height: 42px;
+            border: 4px solid #FFFFFF;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .shield-inner-dot {
+            width: 14px;
+            height: 14px;
+            background: #FFFFFF;
+            border-radius: 3px;
+        }
+
+        /* Bottom Copy on Right Column */
+        .visual-copy-bottom {
+            z-index: 2;
+        }
+
+        .sec-sub-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #818CF8;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sec-heading {
+            font-size: 34px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.8px;
+            color: #FFFFFF;
+            margin-bottom: 24px;
+        }
+
+        .sec-features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sec-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #E2E8F0;
+        }
+
+        .feature-chk {
+            color: var(--accent-cyan);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 960px) {
+            .login-layout {
+                grid-template-columns: 1fr;
+            }
+            .visual-panel {
+                display: none;
+            }
+            .auth-panel {
+                padding: 40px 24px;
+            }
+            .auth-headline {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-layout">
+
+        <!-- ============================================================
+             LEFT COLUMN: AUTHENTICATION FORM
+        ============================================================ -->
+        <main class="auth-panel">
+
+            <!-- Brand Header -->
+            <div class="auth-brand" onclick="window.location.href='/'">
+                <div class="brand-squircle">
+                    <div class="brand-diamond"></div>
+                </div>
+                <div class="brand-text-wrap">
+                    <span class="brand-title">PaySphere</span>
+                    <span class="brand-subtitle">SECURE PAYMENTS</span>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="auth-body-content">
+                <span class="tag-welcome">WELCOME BACK</span>
+                <h1 class="auth-headline">
+                    Your money,<br>
+                    protected from every<br>
+                    angle.
+                </h1>
+                <p class="auth-subheadline">
+                    Sign in to manage payments with live risk analysis and security alerts at your side.
+                </p>
+
+                <form class="auth-form" id="login-form" onsubmit="handleLoginSubmit(event)">
+
+                    <!-- Email Field with Demo Tooltip -->
+                    <div class="form-group">
+                        <label for="email" class="field-label">Email address</label>
+                        <div class="input-box-wrapper">
+                            <!-- Tooltip Prompt matching reference screenshot -->
+                            <div class="demo-tooltip-badge" onclick="fillDemoCredentials()" title="Click to autofill demo account">
+                                <span>demo@example.test</span>
+                            </div>
+
+                            <input 
+                                type="email" 
+                                id="email" 
+                                class="form-input" 
+                                placeholder="you@example.com" 
+                                value="demo@example.test"
+                                required 
+                                autocomplete="email"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Password Field with Forgot Link and Show Toggle -->
+                    <div class="form-group">
+                        <div class="field-label-row">
+                            <label for="password" class="field-label">Password</label>
+                            <a class="link-forgot" onclick="handleForgotPassword()">Forgot password?</a>
+                        </div>
+                        <div class="input-box-wrapper">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                class="form-input" 
+                                placeholder="Enter your password" 
+                                value="paysphere2026"
+                                required 
+                                autocomplete="current-password"
+                            >
+                            <button type="button" class="btn-toggle-show" id="toggle-pw-btn" onclick="togglePasswordVisibility()">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Options Row -->
+                    <div class="auth-options-row">
+                        <label class="remember-label">
+                            <input type="checkbox" class="remember-checkbox" id="remember-me" checked>
+                            <span>Remember me</span>
+                        </label>
+                        <div class="encryption-badge">
+                            <span class="enc-diamond">◈</span>
+                            <span>256-bit encryption</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-signin" id="btn-submit">
+                        <span id="btn-text">Sign In</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+
+                </form>
+
+                <div class="auth-footer-text">
+                    <span class="dot-green">●</span>
+                    <span>Account creation is ready to connect to your preferred identity provider.</span>
+                </div>
+            </div>
+
+            <!-- Empty bottom spacer for balanced flex layout -->
+            <div></div>
+
+        </main>
+
+        <!-- ============================================================
+             RIGHT COLUMN: SECURITY MONITORING VISUAL PANEL
+        ============================================================ -->
+        <aside class="visual-panel">
+            <div class="visual-grid-bg"></div>
+            <div class="visual-radial-glow"></div>
+
+            <!-- Top Monitoring Status Pill -->
+            <div class="monitoring-pill">
+                <span class="status-dot-green"></span>
+                <span>SECURITY MONITORING ACTIVE</span>
+            </div>
+
+            <!-- Center 3D Floating Shield Graphic with Orbital Waves -->
+            <div class="shield-center-container">
+                <div class="orbital-ring ring-1"></div>
+                <div class="orbital-ring ring-2"></div>
+                <div class="orbital-ring ring-3"></div>
+
+                <div class="shield-graphic-wrap" id="shield-graphic">
+                    <!-- SVG 3D Gradient Shield -->
+                    <svg class="shield-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="shieldGrad" x1="20" y1="20" x2="180" y2="220" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#8B5CF6"/>
+                                <stop offset="50%" stop-color="#6366F1"/>
+                                <stop offset="100%" stop-color="#4338CA"/>
+                            </linearGradient>
+                            <linearGradient id="shieldBevel" x1="0" y1="0" x2="200" y2="240" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+                                <stop offset="100%" stop-color="#000000" stop-opacity="0.4"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Shield Path -->
+                        <path d="M100 12 L175 48 V126 C175 178 100 228 100 228 C100 228 25 178 25 126 V48 L100 12 Z" 
+                              fill="url(#shieldGrad)" 
+                              stroke="url(#shieldBevel)" 
+                              stroke-width="2.5"/>
+                    </svg>
+
+                    <!-- Center Shield White Box Icon -->
+                    <div class="shield-inner-box">
+                        <div class="shield-inner-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Feature Copy -->
+            <div class="visual-copy-bottom">
+                <span class="sec-sub-label">PAYSPHERE SECURITY</span>
+                <h2 class="sec-heading">
+                    Every transaction.<br>
+                    Continuously protected.
+                </h2>
+                <ul class="sec-features-list">
+                    <li class="sec-feature-item">
+                        <span class="feature-chk">✓</span>
+                        <span>Fraud detection</span>
+                    </li>
+                    <li class="sec-feature-item">
+                        <span class="feature-chk">✓</span>
+                        <span>Instant security alerts</span>
+                    </li>
+                    <li class="sec-feature-item">
+                        <span class="feature-chk">✓</span>
+                        <span>Secure payment controls</span>
+                    </li>
+                </ul>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const pwInput = document.getElementById('password');
+            const toggleBtn = document.getElementById('toggle-pw-btn');
+            if (pwInput.type === 'password') {
+                pwInput.type = 'text';
+                toggleBtn.textContent = 'Hide';
+            } else {
+                pwInput.type = 'password';
+                toggleBtn.textContent = 'Show';
+            }
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('email').value = 'demo@example.test';
+            document.getElementById('password').value = 'paysphere2026';
+            
+            // Brief visual feedback
+            const emailInput = document.getElementById('email');
+            emailInput.style.borderColor = '#10B981';
+            setTimeout(() => { emailInput.style.borderColor = ''; }, 600);
+        }
+
+        function handleForgotPassword() {
+            alert('PaySphere Security: Password reset instructions have been dispatched to your registered recovery contact.');
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            const btnText = document.getElementById('btn-text');
+
+            btn.disabled = true;
+            btnText.textContent = 'Authenticating & Verifying...';
+
+            // Confetti celebration
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#6366F1', '#10B981', '#38BDF8']
+                });
+            }
+
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 750);
+        }
+
+        // Parallax mouse movement on shield
+        document.addEventListener('mousemove', (e) => {
+            const shield = document.getElementById('shield-graphic');
+            if (!shield) return;
+            const x = (window.innerWidth / 2 - e.clientX) / 45;
+            const y = (window.innerHeight / 2 - e.clientY) / 45;
+            shield.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body>
+</html>
