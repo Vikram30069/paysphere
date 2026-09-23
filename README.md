@@ -1,64 +1,132 @@
-# PaySphere — Intelligent Secure Payments
+<div align="center">
 
-> **TechTycoons Code-Revive Edition**  
-> An intelligent payment simulation platform combining transaction processing, explainable risk detection, and automated Twilio SMS & Voice alerts with a premium fintech 3D interface.
+# PaySphere: Intelligent Payment Simulation & Incident Dispatch
 
----
+### Rule-Based Anomaly Evaluation, Multi-Channel Twilio Alerts & Interactive Incident Console
 
-## 🌟 Key Features
-
-* **3D Holographic Balance Card**: Interactive mouse/touch 3D perspective tilt, holographic glowing pedestal, balance eye-mask toggle, monthly growth indicator, quick actions, and sparkline statistics.
-* **⚠️ Unusual Transaction Detection Alert Card**: Pulsing siren beacon, incident details (`₹45,000.00`, `TXN7892910291`, `High Risk`), and a 5-step action pipeline.
-* **Autonomous Security Response Workflow**: 5-step visual incident pipeline:
-  1. `Transaction Detected`: High-value transfer anomaly flagged.
-  2. `Risk Analysis`: Circular SVG Risk Gauge (92/100, High Risk) with explainable risk factors.
-  3. `Twilio SMS Alert`: Mobile phone mockup rendering verified SMS alerts.
-  4. `Twilio Voice Call`: Incoming call mockup with real-time audio waveform animations.
-  5. `User Notified`: Verification checklist with direct account security actions.
-* **Flagged Transaction Details Drawer**: Multi-tab drawer (`Details`, `Activity`, `Alerts`, `Timeline`), with Copy ID, Download Receipt, and Report/Block controls.
-* **Explainable Rule-Based Risk Engine**: Evaluates transactions (0–100 score) across transfer volume, counterparty novelty, time-of-day, and velocity surges.
-* **Twilio SMS & Voice Orchestration**: Clean provider abstraction supporting live Twilio credentials and a sandbox simulation mode.
-* **Full Financial Invariant Enforced**: Strict balance ledger guarantees (`Ending Balance = Starting Balance - Successful Debits + Successful Credits`).
-* **13 Bug Fixes Intact**: All 13 original defects remain resolved and verified across automated test suites.
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express.js-4.x-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![Twilio](https://img.shields.io/badge/Twilio-SMS%20%7C%20Voice-F22F46?style=flat-square&logo=twilio&logoColor=white)](https://www.twilio.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 ---
 
-## 🚀 Quick Start
+> **Real-Time Financial Incident Orchestration**: An interactive fintech transaction simulation platform that evaluates payment transfers with an explainable risk engine and autonomously dispatches real-time Twilio SMS and synthesized Voice alerts during high-risk transfer anomalies.
 
-### 1. Installation
-```bash
-npm install
-```
-
-### 2. Configuration (Optional for Live Twilio)
-Copy `.env.example` to `.env`:
-```bash
-cp .env.example .env
-```
-Fill in your Twilio credentials if available:
-```env
-TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=+1234567890
-PORT=3000
-```
-*(If credentials are not provided, PaySphere automatically operates in Sandbox Simulation Mode.)*
-
-### 3. Run the Application
-```bash
-node server.js
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+</div>
 
 ---
 
-## 🧪 Running Automated Tests
+## 1. System Architecture & Incident Workflow
 
-* **Unit & Regression Tests (Phase 1 Fixes)**:
-  ```bash
-  node tests/test_logic.js
-  ```
-* **API & Service Integration Tests (Phase 2 Services)**:
-  ```bash
-  node tests/test_api.js
-  ```
+PaySphere models an end-to-end incident response pipeline triggered by transaction anomalies:
+
+```mermaid
+graph TD
+    TXN[Incoming Transaction / Transfer Simulation] --> ENGINE[Rule-Based Risk Engine]
+    
+    subgraph Multi-Signal Risk Assessment
+        ENGINE --> V1[Transfer Volume vs Baseline]
+        ENGINE --> V2[Counterparty Novelty]
+        ENGINE --> V3[Time-of-Day Window]
+        ENGINE --> V4[Burst Velocity Anomaly]
+    end
+
+    V1 & V2 & V3 & V4 --> SCORE[Composite Risk Score: 0 - 100]
+
+    SCORE -->|Score >= 75 - HIGH RISK| DISPATCH[Autonomous Incident Dispatcher]
+    SCORE -->|Score < 75 - NORMAL| CLEAR[Process & Ledger Update]
+
+    subgraph Emergency Alert Dispatch
+        DISPATCH --> SMS[Twilio SMS Gateway: Verification Code]
+        DISPATCH --> VOICE[Twilio Programmable Voice: IVR Callback]
+        DISPATCH --> UI[Incident Drawer & Holographic Siren Alert]
+    end
+```
+
+---
+
+## 2. Core Features
+
+- **Rule-Based Risk Scoring**: Quantifies transaction risk (0–100) using a multi-factor heuristic engine evaluating transfer amount, beneficiary novelty, unusual transaction hours, and transfer velocity.
+- **Automated Multi-Channel Telephony**: Dispatches urgent SMS notifications and initiates automated synthetic voice phone calls via Twilio when transactions trigger high-risk thresholds.
+- **Interactive Security UI/UX**:
+  - **3D Holographic Perspective Tilt**: Dynamic mouse-tracking CSS 3D balance card with monthly trend sparklines.
+  - **Circular SVG Risk Gauge**: Visual risk breakdown displaying specific contributing factors (e.g. `+35 New Beneficiary`, `+30 Amount Surge`).
+  - **Forensic Drawer**: Expandable incident drawer with transaction ID hashing, receipt export, and account lock controls.
+- **Modular Backend Services**: Strict separation between `paymentService.js`, `riskService.js`, and `notificationService.js`.
+
+---
+
+## 3. Technology Stack
+
+- **Backend Runtime**: Node.js (v18+), Express.js
+- **Telephony & Emergency Alerts**: Twilio Node SDK (Programmable SMS & Voice)
+- **Frontend Layer**: HTML5, Vanilla JavaScript, CSS3 3D Canvas
+- **Testing**: Node.js test runners (`tests/test_api.js`, `tests/test_logic.js`)
+
+---
+
+## 4. Project Structure
+
+```
+paysphere/
+├── providers/                  # External service clients (Twilio wrapper)
+├── services/                   # Business logic layer
+│   ├── notificationService.js  # SMS and Voice dispatch logic
+│   ├── paymentService.js       # Transaction simulation & history
+│   └── riskService.js          # Heuristic scoring engine
+├── tests/                      # Automated test scripts
+│   ├── test_api.js
+│   └── test_logic.js
+├── index.html                  # Main interactive dashboard
+├── login.html                  # Authentication demo view
+├── script.js                   # Client-side state & UI controllers
+├── style.css                   # Custom 3D UI & theme styling
+├── server.js                   # Express application entrypoint
+├── package.json
+└── README.md
+```
+
+---
+
+## 5. Quickstart & Installation
+
+### Prerequisites
+- Node.js v18 or higher
+- Twilio Account credentials (optional for testing; mock fallback included)
+
+### Setup Instructions
+
+1. **Clone repository:**
+   ```bash
+   git clone https://github.com/Vikram30069/paysphere.git
+   cd paysphere
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment:**
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Run test suite:**
+   ```bash
+   npm test
+   ```
+
+5. **Start server:**
+   ```bash
+   npm start
+   ```
+   Open `http://localhost:3000` in your browser.
+
+---
+
+## 6. License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
